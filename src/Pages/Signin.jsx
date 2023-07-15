@@ -3,14 +3,13 @@ import Logo from './../Assets/Images/logo.png'
 import { Link, useNavigate } from 'react-router-dom'
 import { ThreeDots } from 'react-loader-spinner'
 
-const axios = require('axios').default;
 
 const Signin = () => {
   const navigate=useNavigate()
 
   //check if user already is logged in 
   useLayoutEffect(() => {
-    document.title = "Login | BEND DOWN SELECT"
+    document.title = "Login | Big Money awaits you"
     if (sessionStorage.getItem("token")) {
       window.location.href = "/dashboard"
     }
@@ -47,37 +46,47 @@ const Signin = () => {
     //set password
     setPassword(e.target.value)
     setPasswordError(null);
+    setfeedback('')
   }
   const emailHandler = (e) => {
     setEmail(e.target.value)
     setEmailError(null);
+    setfeedback('')
   }
 
   //Input Handlers End here
-
 //sign in api function
   const fetchApi = async () => {
     setLoading(true);
-    console.log(JSON.stringify(
-      userInfo
-    ));
-  
-  
-      
-        axios.post(LoginUrl, {
-      userInfo,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
+    try {
+      const response = await fetch(LoginUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(
+          userInfo
+        ),
       });
-  
-  }
+      const data = await response.json();
+      if (response.ok) {
+
+        sessionStorage.setItem("token", data.token);
+        sessionStorage.setItem("user", JSON.stringify(data));
+        navigate("/dashboard", {
+          state: data,
+          replace: true,
+        });
+      } else {
+        setLoading(false);
+        setfeedback(data.message)
+
+      }
+    } catch (error) {
+      setLoading(false);
+      setfeedback(error)
+    }
+  };
+
+
   //FormHandler
 
   const FormHandler = (e) => {
@@ -93,9 +102,7 @@ const Signin = () => {
     else  {
      
       userInfo = { email, password }
-      //call loginapi
-      console.log(userInfo);
-      
+    //call Api      
      fetchApi();
 
     }
@@ -119,13 +126,13 @@ const Signin = () => {
           </div>
         </div>
         <div className='mt-[-0.5rem] text-[12px] text-[#81020C] mb-2'>{PasswordError !== null && PasswordError}</div>
-        {feedback !== '' && <div>{feedback}</div> }
-        {loading === true ? <button className='bg-[#020216] w-full p-3 rounded-sm text-[#DECBF1]' disabled>
+        {feedback !== '' && <div className='mt-[-0.5rem] text-[12px] text-[#81020C] mb-2'>{feedback}</div> }
+        {loading === true ? <button className='bg-[#020216] w-full p-3 rounded-sm text-[#DECBF1] text-center flex items-center  justify-center' disabled>
           <ThreeDots
             height="30"
             width="30"           
             radius="9"
-            color="#4fa94d"
+            color="#DECBF1"
             ariaLabel="three-dots-loading"
             visible={true}
           />

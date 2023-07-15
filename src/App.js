@@ -9,25 +9,23 @@ import ErrorPage from './Pages/ErrorPage'
 import Dashboard from './Pages/Dashboard'
 import Transaction from './Pages/Transaction'
 import PasswordReset from './Pages/PasswordReset'
+import AmountToTransfer from './Pages/AmountToTransfer'
 
-const isLoggedIn = () => {
+
+
+
+const ProtectedRoutes = ({children }) => {
   if (sessionStorage.getItem("token")) {
-    return true
-  } else {
-    return false
-  }
-}
-const ProtectedRoutes = ({ isLoggedIn, children }) => {
-  if (!isLoggedIn) {
-    return <Navigate to={"/"} replace={true} />
-  } else {
     return children
+  } else {
+    return <Navigate to={"/"} replace={true} />
   }
 }
 
 
 
 const App = () => {
+
   return (
     <Routes>
       <Route path='/' element={<Home />}></Route>
@@ -44,6 +42,7 @@ const App = () => {
       
       <Route path='/dashboard' element={
       <ProtectedRoutes>
+
       <Dashboard />
       </ProtectedRoutes>
       }></Route>
@@ -59,6 +58,14 @@ const App = () => {
           <Transaction />
       </ProtectedRoutes>
       }></Route>
+
+
+      <Route path='/amount' element={
+        <ProtectedRoutes>
+          <AmountToTransfer />
+        </ProtectedRoutes>
+      }></Route>
+
           {/* Error Page */}
       <Route path='*' element={<ErrorPage />}></Route>
     </Routes>

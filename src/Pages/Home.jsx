@@ -1,9 +1,17 @@
-import {React } from 'react'
+import {React, useEffect} from 'react'
 import Logo from './../Assets/Images/logo.png'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 
 const Home = () => {
+const navigate = useNavigate();
+ useEffect(() => {
+  setTimeout(()=>{
+    return navigate("/signin")
+      },3000)
+ }, [navigate])
+
+ 
   return (
     <div className='bg-[#020216] w-screen h-screen flex justify-center items-center flex-col'>
         <div className="">

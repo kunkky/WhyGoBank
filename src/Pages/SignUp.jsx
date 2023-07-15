@@ -1,8 +1,20 @@
-import { React, useState } from 'react'
+import { React, useState, useLayoutEffect } from 'react'
 import Logo from './../Assets/Images/logo.png'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate,  } from 'react-router-dom'
+import { ThreeDots } from 'react-loader-spinner'
 
 const SignUp = () => {
+
+  const navigate = useNavigate()
+//check if user is already log in and redirect
+  useLayoutEffect(() => {
+    document.title = "Sign Up | Number one bank"
+    if (sessionStorage.getItem("token")) {
+      window.location.href = "/dashboard"
+    }
+  }, [])
+
+
 
 //use states variables for all input and states
   const [name, setName] = useState("")
@@ -19,8 +31,12 @@ const SignUp = () => {
   const [ConfirmPassError, setConfirmPassError] = useState(null)
   const [EmailError, setEmailError] = useState(null)
   const [FullnameError, setFullnameError] = useState(null)
-  const [InputError, setInputError] = useState(false)
 
+  const [loading, setLoading] = useState(false)
+  const [feedback, setfeedback] = useState('')
+  let userInfo = {}
+
+  const LoginUrl = 'http://127.0.0.1:8000/api/register';
 
 //password toggle
   const togglePassword= ()=>{
@@ -51,27 +67,68 @@ const SignUp = () => {
     //set password
     setPassword(e.target.value)
     setPasswordError(null);
+    setfeedback('')
   }
   const InputConfirmPasswordHandler = (e) => {
     //set password
     setConfirmPassword(e.target.value)
     setConfirmPassError(null);
+    setfeedback('')
   }
   const usernameHandler = (e) => {
     setUsername(e.target.value)
     setusernameError(null);
+    setfeedback('')
   }
   const emailHandler = (e) => {
     setEmail(e.target.value)
     setEmailError(null);
+    setfeedback('')
   }
   const fullnameHandler = (e) => {
     setName(e.target.value)
     setFullnameError(null);
+    setfeedback('')
   }
 
 //Input Handlers End here
 
+//fect api start here
+  //sign in api function
+  const fetchApi = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(LoginUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(
+          userInfo
+        ),
+      });
+      const data = await response.json();
+      if (response.ok) {
+
+        sessionStorage.setItem("token", data.token);
+        sessionStorage.setItem("user", JSON.stringify(data));
+        navigate("/dashboard", {
+          state: data,
+          replace: true,
+        });
+      } else {
+        setLoading(false);
+        console.log(data);
+        setfeedback(data.message)
+
+      }
+    } catch (error) {
+      setLoading(false);
+      setfeedback(error)
+    }
+  };
+
+
+
+//fetch api ends here
 //FormHandler
 
   const FormHandler =(e)=>{
@@ -80,38 +137,31 @@ const SignUp = () => {
     if (name.length <= 3 || name.includes('0')) {
   //throw error
   setFullnameError("Please use a Valid Name")
-  setInputError(true);
 }
    else if (email.includes("@") !== true || email.includes(".") !== true) {
      //throw error
      setEmailError("Use a Valid Email")
-     setInputError(true);
    }
 
   else  if (username.length <= 3) {
       //throw error
       setusernameError("Username should be more than 3")
-      setInputError(true);
     }
    else if (password.length < 7) {
       //throw error
       setPasswordError("Password should be more than 6")
-      setInputError(true);
     }
   else if (confirmPassword !== password) {
       //throw error
       setConfirmPassError("Confirm Password not correct")
-      setInputError(true);
     }
 
-    else if (InputError!==true){
-      //no error u can proceed
-      console.log('you can register user as no error is found');
-    
-    }
     else{
-     console.log('you can not register user as no error is found');
-    
+      //no error u can proceed
+      userInfo = { email, password, username, fullname: name }
+      fetchApi();
+
+
     }
   }
 
@@ -147,7 +197,20 @@ const SignUp = () => {
           </div>
         </div>
         <div className='mt-[-0.5rem] text-[12px] text-[#81020C] mb-2'>{ConfirmPassError !== null && ConfirmPassError}</div>
-        <button className='bg-[#020216] w-full p-3 rounded-sm text-[#DECBF1]'>Sign Up</button>
+        {feedback !== '' && <div className='mt-[-0.5rem] text-[12px] text-[#81020C] mb-2'>{feedback}</div>}
+        {loading === true ? <button className='bg-[#020216] w-full p-3 rounded-sm text-[#DECBF1] text-center flex items-center  justify-center' disabled>
+          <ThreeDots
+            height="30"
+            width="30"
+            radius="9"
+            color="#DECBF1"
+            ariaLabel="three-dots-loading"
+            visible={true}
+          />
+        </button>
+          : <button className='bg-[#020216] w-full p-3 rounded-sm text-[#DECBF1]'>Sign in</button>
+        }
+
       </form>
       <div className='border-t-solid border-t-2 border-[#F8F1E9] mt-2 p-2 text-center w-[80%] lg:w-[600px]'>
         <Link to="/signin" className='font-bold cursor-pointer'>Sign In</Link>  Returning User <br />
