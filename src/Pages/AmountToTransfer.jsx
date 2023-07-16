@@ -4,6 +4,12 @@ import { useLocation, useNavigate, Link } from 'react-router-dom'
 
 const AmountToTransfer = () => {
 
+
+  const UserDetails = JSON.parse(sessionStorage.getItem("user"));
+
+
+
+const accBal=5000000;
 //use navigate to go back
 const  navigate=useNavigate()
 
@@ -28,18 +34,87 @@ const location= useLocation();
   const [amount, setAmount] = useState('')
   //set state forBalance 
   const [balance, setBalance] = useState('')
+  const [moneyError, setMoneyError] = useState(null)
+  const [inputPin, setInputPin] = useState(false)
+
+  const [PasswordEyes, setPasswordEyes] = useState('visibility')
+  const [PasswordType, setPasswordType] = useState('password')
+  const [password, setPassword] = useState('')
+  const [PasswordError, setPasswordError] = useState(null)
+  const [feedback, setfeedback] = useState('')
+
+  
   const cleanAmount = (userInput)=>{
   //use regex remove things that are not number
-    setAmount(userInput.replace(/[A-Za-z]/g, ''));
+
+    const cleanValue = userInput.replace(/[A-Za-z,]/g, ''); // Remove existing commas from the input value
+    const formattedValue = cleanValue.replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Add thousand separators
+
+    setAmount(formattedValue);
     //calculate balance
+    const userBal = accBal-Number(cleanValue)
+    setBalance(userBal)
+    setMoneyError(null)
+    setInputPin(false)
+    
   }
 
   //set transfer Money Function 
-  const transferMoney=()=>{
-  
+  const transferMoney=(e)=>{
+  e.preventDefault()
+    if (balance <= 100) {
+      setMoneyError('Balance must be above NGN 100')
+    }
+    else {
+      setMoneyError(null)
+      setInputPin(true)
+    }
+
+
+  }
+//toggle password eye
+  //password toggle
+  const togglePassword = () => {
+    if (PasswordEyes === 'visibility') {
+      setPasswordEyes('visibility_off');
+      setPasswordType('text')
+    }
+    else {
+      setPasswordEyes('visibility');
+      setPasswordType('password')
+
+    }
+  }
+  //Input Handlers here
+  const InputPasswordHandler = (input) => {
+    //set password
+    const cleanValue = input.replace(/\D/g, '');
+   setPassword(cleanValue);
+    setfeedback('')
+    setPasswordError(null)
+
+  }
+  //confirm transaction pin
+  const confirmPin=()=>{
+
+
+    const transaction_pin = UserDetails.user.transaction_pin;
+
+    //check if pin length is less  than 6
+    if (password.length<6){
+      setPasswordError('PIN should not be less than 6 Digits')
+    }
+    else if (Number(password) !== transaction_pin ){
+      setPasswordError('Incorrect Pin')
+
+    }
+    else{
+      setPasswordError(null)
+      console.log('hurray money on the way');
+    }
   
   }
-//get state
+
   return (
     <div>
       <div className='w-full  h-[85%] '>
@@ -65,15 +140,45 @@ const location= useLocation();
         </div>
         <div className="w-full h-[70%] flex p-5">
           {
-          <div>
-              <h1>Transfer to </h1>
-            <div>Name {TransationDetails.account_name}</div>
-            <div>Acoount Number {TransationDetails.account_number}</div>
-            <div>Bank {TransationDetails.bank_name}</div>
-              <form onSubmit={transferMoney}>
-              <label>Amount</label>
-              <input type="number" value={amount} onInput={(e) => cleanAmount(e.target.value)}/>
-
+            <div className=' bg-[#F8F4FC] rounded p-5 w-full'>
+              <h1 className='text-sm text-[#9A9AA2] mb-5'>Transaction Amount </h1>
+              <div className='text-[#676773]'>Bank {TransationDetails.bank_name}</div>
+              <div className='text-[#676773]'>{TransationDetails.account_number}</div>
+              <div className='text-[#676773] font-medium'>{TransationDetails.account_name}</div>
+              <form onSubmit={transferMoney} className='mt-4'>
+                <label className='text-sm text-[#9A9AA2]'>Amount</label>
+                <div className="relative">
+                  <input type='text' name="0.00" placeholder="amount to Transfer" className='w-full p-2 text-[#020216] bg-[#F8F1E9] font-bold rounded text-right mb-2' value={amount} onInput={(e) => cleanAmount(e.target.value)} />
+                  <div className="absolute left-0 top-0 p-2 flex items-center">
+                    NGN
+                  </div>
+                  </div>
+                <div className=' text-sm text-[#81020C]'>{moneyError}</div>
+                <div className='text-sm text-[#9A9AA2]'>Balance after Transfer </div>
+                {balance !== '' && <div>NGN {balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</div>}
+                {inputPin === false ? (
+                  <button
+                    className="bg-[#020216] w-full p-3 rounded-sm text-[#DECBF1] mt-4" disabled={amount.length < 2}
+                  >
+                    Send Money
+                  </button>
+                ) : (
+                  <div>
+                      <div className="relative mt-5">
+                        <input type={PasswordType} name="password" placeholder='Transfer Pin' onInput={(e) => InputPasswordHandler(e.target.value)} className='w-full p-2 text-[#CCCCD0] bg-[#F8F1E9] rounded-sm mb-2' value={password}/>
+                        <div className="absolute right-0 top-0 p-2 flex items-center" onClick={togglePassword}>
+                          <span className="material-symbols-outlined text-[#CCCCD0]">
+                            {PasswordEyes}
+                          </span>
+                        </div>
+                      </div>
+                      <div className='text-[#81020C] text-sm'>{PasswordError}</div>
+                      <button
+                        className="bg-[#020216] w-full p-3 rounded-sm text-[#DECBF1] mt-4" onClick={confirmPin}>
+                        Confirm Pin
+                      </button>
+                  </div>
+                )}
               </form>
           </div>
           }
