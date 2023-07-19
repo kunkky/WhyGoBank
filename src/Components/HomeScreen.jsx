@@ -4,7 +4,7 @@ import {Link} from "react-router-dom"
 import RecentTransaction from './RecentTransaction'
 import { ProgressBar } from 'react-loader-spinner'
 
-const HomeScreen = ({ UserDetails, Recent, AccountBal, toggleEye, acctType, recentLoading, Loading }) => {
+const HomeScreen = ({ UserDetails, Recent, AccountBal, toggleEye, togableBal, acctType, recentLoading, Loading }) => {
   return (
     <div className='w-full  h-[85%] '>
         <div className=" w-full fixed flex-col h-[30%] bg-white flex top-0">
@@ -23,12 +23,12 @@ const HomeScreen = ({ UserDetails, Recent, AccountBal, toggleEye, acctType, rece
                 </div>
               </div>
             </div>
-            <div className="p-5">
+            <div className="p-4">
             
 
           <div className="w-full rounded-md bg-[#020216] h-[auto] ">
-            <div className="flex justify-between items-center p-2">
-              <div className='text-[#F8F1E9] text-sm'>Balance</div>
+            <div className="flex justify-between items-center px-2 p-1">
+              <div className='text-[#F8F1E9] text-sm '>Balance</div>
               <div>
                 <span className="material-symbols-outlined text-[#F8F1E9] text-xl" onClick={toggleEye}>
                   visibility_off
@@ -47,12 +47,14 @@ const HomeScreen = ({ UserDetails, Recent, AccountBal, toggleEye, acctType, rece
                   barColor='#353545'
                 /> :
 
-                  <input type={acctType} value={AccountBal !== null ? AccountBal.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") : 0} className='text-5xl font-semibold text-[#F8F1E9] text-left w-full px-3 border-none bg-[#020216] text-left' disabled />
+                  <h1 className='text-4xl font-semibold text-[#F8F1E9] text-left w-full px-3 border-none bg-[#020216] text-left' >
+                    {togableBal !== null ? togableBal.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") : 0} 
+                  </h1>
               
               }
              
             </div>
-            <div className="flex justify-between items-center p-2">
+            <div className="flex justify-between items-center px-2 p-1">
               <div className='text-[#CCCCD0] text-sm'>NGN</div>
             </div>
           </div>
@@ -60,7 +62,7 @@ const HomeScreen = ({ UserDetails, Recent, AccountBal, toggleEye, acctType, rece
 
             </div>
         </div>
-        <div className="w-full h-[70%] flex mt-[60%] p-5">
+        <div className="w-full h-[60%] flex mt-[60%] p-5">
 
         <RecentTransaction recentLoading={recentLoading} Recent={Recent} />
 

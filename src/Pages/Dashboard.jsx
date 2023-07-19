@@ -16,8 +16,9 @@ const Dashboard = () => {
   const [Actfeedback, setActfeedback] = useState('')
   const [recentfeedback, setRecentfeedback] = useState('')
   const [AccountBal, setAccountBal] = useState(null)
-  const [toggletype, settoggletype] = useState('text')
   const [recentLoading, setRecentLoading] = useState(true)
+  const [starBal, setStarBal] = useState('')
+  const [togableBal, setTogableBal] = useState(null)
   
   const [recent, setRecent] = useState([])
 
@@ -25,33 +26,6 @@ const Dashboard = () => {
 
 
   const accessToken = sessionStorage.getItem("token");
-  const fetchApi = async () => {
-    setLoading(true);
-
-    fetch(apiUrl +'/accountDetails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json', 
-        
-      },
-      body: JSON.stringify(
-        { "account_number": account_number }
-      )
-    })
-      .then(response => response.json())
-      .then(data => {
-        // Data successfully retrieved
-        setLoading(false);
-        data.message ? setActfeedback(data.message) : setAccountBal(data.account.balance)        
-      })
-      .catch(error => {
-        // Handle any errors
-        setLoading(false);
-        setActfeedback(error)
-      });
-  }
-
   //  const 
   const fetchRecent = async () => {
   setRecentLoading(true);
@@ -79,22 +53,64 @@ const Dashboard = () => {
       console.log(error);
     });
 }
+
+  const fetchApi = async () => {
+    setLoading(true);
+
+    fetch(apiUrl + "/accountDetails", {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+
+      },
+      body: JSON.stringify(
+        { "account_number": account_number }
+      )
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Data successfully retrieved
+        setLoading(false);
+        if (data.message) { setActfeedback(data.message) }
+        else {
+          setAccountBal(data.account.balance);
+          setTogableBal(data.account.balance)
+          setStarBal(data.account.balance.replace(/\d+/g, "*"))
+        }
+
+      })
+      .catch(error => {
+        // Handle any errors
+        setLoading(false);
+        setActfeedback(error)
+      });
+  }
+
 //call account api
   useEffect(() => {
     fetchApi()
-  },[])
+  }, [AccountBal])
 
   //recent transactions
   useEffect(() => {
     fetchRecent()
-  }, [])
+    
+  }, [AccountBal])
 
   const toggleEye =()=>{
-    toggletype === 'text' ? settoggletype('password') : settoggletype('text')
+    const inputString =AccountBal;
+    if (/\d/.test(togableBal) ===true) {
+      setTogableBal(inputString.replace(/\d/g, "*"));   
+      //setStarBal(data.account.balance.replace(/\d+/g, "*"))
+    }
+    else{
+      setTogableBal(AccountBal);        
+    }
   }
   return (
     <div className='flex flex-col w-[100svw] h-[100svh] gap-4'>
-      <HomeScreen AccountBal={AccountBal} Recent={recent} UserDetails={UserDetails} toggleEye={toggleEye} acctType={toggletype} recentLoading={recentLoading} Loading={Loading}/>
+      <HomeScreen AccountBal={AccountBal} Recent={recent} UserDetails={UserDetails} toggleEye={toggleEye} togableBal={togableBal} recentLoading={recentLoading} Loading={Loading}/>
       <Nav/>
     </div>
   )

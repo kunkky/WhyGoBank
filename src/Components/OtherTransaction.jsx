@@ -148,11 +148,12 @@ const OtherTransaction = (props) => {
         };
         //go to next page
         navtoPayment(RecipientAcct)
+      console.log('transfer can be made');
       
     }
   return (
       <div className='w-full  h-[100%] '>
-          <div className=" w-full flex-col h-[70%] flex">
+          <div className=" w-full flex-col h-[auto] mb-1 flex">
 
               <h1 className='px-5'>Recipient Account</h1>
               <div className="p-2 flex flex-col">
@@ -169,11 +170,11 @@ const OtherTransaction = (props) => {
                         
                       </select>
                           <div className='text-sm text-[#81020C]'>{bankError!=="false" && bankError}</div>
-                        <input type='text'  className='font-semibold border-0 bg-transparent  h-auto w-full' value={
+                            <label className='font-semibold border-0 bg-transparent  h-auto w-full'>{
                               accountNamefeedBack !== null ? accountNamefeedBack : accountName !== null ? accountName :
                               ''
-                        }  disabled/>
-                          <input type="text" placeholder='Enter 10 digits Account Number' className='text-[#9A9AA2] mt-1 px-1 w-full border-0 bg-transparent border-b-2 border-b-slate-400' value={accountNum} onChange={(e) => { checkInput(e.target.value) }} onBlur={checkAccount}/>
+                        } </label>
+                          <input type="text" placeholder='Enter 10 digits Account Number' className='text-[#9A9AA2] mt-1 px-1 w-full border-0 bg-transparent py-0 border-b-2 border-b-slate-400' value={accountNum} onChange={(e) => { checkInput(e.target.value) }} onBlur={checkAccount}/>
                           <div className='text-sm text-[#81020C]'>{accountError}</div>
                             { 
                               btnCheckControl ===false ? 

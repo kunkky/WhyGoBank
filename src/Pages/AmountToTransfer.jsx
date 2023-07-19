@@ -1,5 +1,9 @@
 import {React, useEffect, useState} from 'react'
 import { useLocation, useNavigate, Link } from 'react-router-dom'
+import { ThreeDots } from 'react-loader-spinner'
+import useSendMoney from './../Hooks/useSendMoney'
+import getBalance from '../Hooks/useGetBalance'
+import useGetBalance from '../Hooks/useGetBalance'
 
 
 const AmountToTransfer = () => {
@@ -9,7 +13,7 @@ const AmountToTransfer = () => {
 
 
 
-const accBal=5000000;
+
 //use navigate to go back
 const  navigate=useNavigate()
 
@@ -41,7 +45,19 @@ const location= useLocation();
   const [PasswordType, setPasswordType] = useState('password')
   const [password, setPassword] = useState('')
   const [PasswordError, setPasswordError] = useState(null)
-  const [feedback, setfeedback] = useState('')
+  const [transactionDetail, setTransactionDetail] = useState(null)
+  
+//get balance variables 
+//fetch user account balance
+const accBal=5000000;
+  const getBalance = useGetBalance('accountDetails', transactionDetail)
+  useEffect(() => {
+    // Update the senderfeedback when it changes from the custom hook
+    setSenderfeedback(sender.apifeedback);
+  }, [getBalance.accountBal]);
+
+console.log(getBalance);
+
 
   
   const cleanAmount = (userInput)=>{
@@ -90,7 +106,6 @@ const location= useLocation();
     //set password
     const cleanValue = input.replace(/\D/g, '');
    setPassword(cleanValue);
-    setfeedback('')
     setPasswordError(null)
 
   }
@@ -110,10 +125,33 @@ const location= useLocation();
     }
     else{
       setPasswordError(null)
-      console.log('hurray money on the way');
+      setTransactionDetail({
+        sender_account_number: UserDetails.user.account_number,
+        sender_account_name: UserDetails.user.fullname,
+        receiver_account_number: TransationDetails.account_number,
+        reciever_account_name: TransationDetails.account_name,
+        reciever_bank_name: TransationDetails.bank_name,
+        amount: amount,
+        naration: "null",
+      })
+     
     }
   
   }
+//fectch api
+
+  const [loading, setLoading] = useState(false)
+  const [senderfeedback, setSenderfeedback] = useState('')
+  const sender = useSendMoney('sendMoney', transactionDetail)
+
+  useEffect(() => {
+    // Update the senderfeedback when it changes from the custom hook
+    setSenderfeedback(sender.apifeedback);
+  }, [sender.apifeedback]);
+
+
+
+//rediect if senderfeedback is successful
 
   return (
     <div>
@@ -174,8 +212,19 @@ const location= useLocation();
                       </div>
                       <div className='text-[#81020C] text-sm'>{PasswordError}</div>
                       <button
-                        className="bg-[#020216] w-full p-3 rounded-sm text-[#DECBF1] mt-4" onClick={confirmPin}>
-                        Confirm Pin
+                        className="bg-[#020216] w-full p-3 rounded-sm text-[#DECBF1] mt-4  text-center flex items-center  justify-center" onClick={confirmPin}
+                        disabled={loading}>
+                        {
+                          loading===true?
+                            <ThreeDots
+                              height="30"
+                              width="30"
+                              radius="9"
+                              color="#DECBF1"
+                              ariaLabel="three-dots-loading"
+                              visible={true}
+                            /> : "Confirm Pin"
+                        }
                       </button>
                   </div>
                 )}
