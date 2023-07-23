@@ -1,16 +1,18 @@
-import {React, useEffect, useState } from 'react'
+import {React, useState } from 'react'
 import BankCode from '../Hooks/BankCode'
 import RecentList from './RecentList'
 import ListBeneficiary from './ListBeneficiary'
 import SearchAccount from './SearchAccount'
+import RecentTransaction from './RecentTransaction'
+import useRecentTransaction from '../Hooks/useRecentTransaction'
+
 
 
 const OtherTransaction = (props) => {
 
     const navtoPayment = props.navtoPayment;
     const banks = BankCode.entity
-    const [recent, setRecent] = useState([])
-    const [recentLoading, setRecentLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [btnCheckControl, setBtnCheckControl] = useState(false)
     const [accountNum, setAccountNum] = useState('')
     const [accountName, setAccountName] = useState(null)
@@ -29,7 +31,7 @@ const OtherTransaction = (props) => {
     
 //fetch recent
     const fetchApi = async () => {
-        setRecentLoading(true);
+        setLoading(true);
 
         fetch('https://api.paystack.co/bank/resolve?account_number='+accountNum+'&bank_code='+sbankCode, {
             method: 'GET',
@@ -42,7 +44,7 @@ const OtherTransaction = (props) => {
             .then(response => response.json())
             .then(data => {
                 // Data successfully retrieved
-                setRecentLoading(false);
+                setLoading(false);
 
                 if(data.status===false){ 
                     setAccountNamefeedBack("Account does not exist")
@@ -58,7 +60,7 @@ const OtherTransaction = (props) => {
             })
             .catch(error => {
                 // Handle any errors
-                setRecentLoading(false);
+                setLoading(false);
                 setAccountName(null)
                 setBankName(null)
                 setAccountNamefeedBack("please check connection")
@@ -131,6 +133,9 @@ const OtherTransaction = (props) => {
         //go to next page
         navtoPayment(RecipientAcct)
     }
+
+    const { recent, recentfeedback, recentLoading } = useRecentTransaction('transactionHistory', account_number);
+
   return (
       <div className='w-full  h-[100%] '>
           <div className=" w-full flex-col h-[auto] mb-1 flex">
@@ -173,7 +178,7 @@ const OtherTransaction = (props) => {
                       {listScreen === "recent" ? <h1 className='text-[#9A9AA2] border-0 border-b-2 border-b-slate-400 pb-2' onClick={() => (setListScreen('recent'))}>Recents</h1> : <h1 className='text-[#9A9AA2] border-0  pb-2' onClick={() => (setListScreen('recent'))}>Recents</h1>
                       }
                       {
-                          listScreen === "beneficiary" ? <h1 className='text-[#9A9AA2] border-0 border-b-2 border-b-slate-400 pb-2' onClick={() => (setListScreen('beneficiary'))}>Beneficiaries</h1> : <h1 className='text-[#9A9AA2] border-0  pb-2' onClick={() => (setListScreen('beneficiary'))}>Recents</h1>
+                          listScreen === "beneficiary" ? <h1 className='text-[#9A9AA2] border-0 border-b-2 border-b-slate-400 pb-2' onClick={() => (setListScreen('beneficiary'))}>Beneficiaries</h1> : <h1 className='text-[#9A9AA2] border-0  pb-2' onClick={() => (setListScreen('beneficiary'))}>Beneficiaries</h1>
                       }
                       {
                           listScreen === "search" ? <div className="material-symbols-outlined  border-0 border-b-2 border-b-slate-400 pb-2 text-[#676773]" onClick={() => (setListScreen('search'))}>
@@ -186,7 +191,9 @@ const OtherTransaction = (props) => {
                      
                     </div>
                   <div className='h-[auto] w-full flex flex-col'>
-                      {listScreen === 'recent' ? <RecentList /> : listScreen === 'beneficiary' ? <ListBeneficiary /> : <SearchAccount recent={recent}/> }
+                      {listScreen === 'recent' ? 
+                          <RecentTransaction recentLoading={recentLoading} Recent={recent} />
+                      : listScreen === 'beneficiary' ? <ListBeneficiary /> : <SearchAccount recent={recent}/> }
                   </div>
               </div>
 

@@ -6,8 +6,10 @@ import { ProgressBar } from 'react-loader-spinner'
 const RecentTransaction = (props) => {
   const recentTransaction =props.Recent;
   const recentLoading = props.recentLoading;
+  console.log("i stopped her trying to fix transaction list");
   let senderName, fName,space, sName, avartar, tDate; 
   const fDate = (tDate) =>{
+
 
     // Create a new Date object using the original date string
     var date = new Date(tDate);
@@ -28,6 +30,7 @@ const RecentTransaction = (props) => {
     var formattedDateTime = `${formattedDate} | ${formattedTime}`;
     return formattedDateTime;
   }
+
   return (
     <div className='w-full'>
       <div className="text-sm h-[10%] w-full border-t-2 border-t-[#F8F1E9] ">Transactions</div>

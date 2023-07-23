@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import Nav from '../Components/Nav'
 import HomeScreen from '../Components/HomeScreen'
 import useGetBalance from '../Hooks/useGetBalance'
-
+import useRecentTransaction from '../Hooks/useRecentTransaction'
 
 const Dashboard = () => {
 
@@ -14,45 +14,18 @@ const Dashboard = () => {
 
   const [Loading, setLoading] = useState(true);
   const [Actfeedback, setActfeedback] = useState('')
-  const [recentfeedback, setRecentfeedback] = useState('')
   const [AccountBal, setAccountBal] = useState(null)
-  const [recentLoading, setRecentLoading] = useState(true)
   const [starBal, setStarBal] = useState('')
   const [togableBal, setTogableBal] = useState(null)
-  
-  const [recent, setRecent] = useState([])
 
+  const { recent, recentfeedback, recentLoading } = useRecentTransaction('transactionHistory', account_number);
+  
   const apiUrl ="http://127.0.0.1:8000/api";
 
 
   const accessToken = sessionStorage.getItem("token");
   //  const 
-  const fetchRecent = async () => {
-  setRecentLoading(true);
 
-  fetch(apiUrl + '/transactionHistory', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-
-    },
-    body: JSON.stringify(
-      { "account_number": account_number }
-    )
-  })
-    .then(response => response.json())
-    .then(data => {
-      // Data successfully retrieved
-      setRecentLoading(false);
-      data.message ? setRecentfeedback(data.message) : setRecent(data.transactions)
-    })
-    .catch(error => {
-      // Handle any errors
-      setRecentLoading(false);
-      console.log(error);
-    });
-}
 
 
 //fetch user account balance
@@ -96,12 +69,6 @@ const Dashboard = () => {
 //call account api
   useEffect(() => {
     fetchApi()
-  }, [AccountBal])
-
-  //recent transactions
-  useEffect(() => {
-    fetchRecent()
-    
   }, [AccountBal])
 
   const toggleEye =()=>{
