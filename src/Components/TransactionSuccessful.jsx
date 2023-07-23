@@ -3,11 +3,9 @@ import { Link } from 'react-router-dom';
 
 
 const TransactionSuccessful = (props) => {
-  const handleGoBack = props.handleGoBack;
   const transactionResult = props.transactionResult;
   const handleDownloadImage = props.handleDownloadImage;
 
-  console.log(transactionResult);
   return (
     <div className='w-screen h-screen p-5'>
       <div className='w-full h-auto p-5  bg-[#E4F2E7] rounded-lg' id="print">

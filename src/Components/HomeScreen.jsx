@@ -4,7 +4,7 @@ import {Link} from "react-router-dom"
 import RecentTransaction from './RecentTransaction'
 import { ProgressBar } from 'react-loader-spinner'
 
-const HomeScreen = ({ UserDetails, Recent, AccountBal, toggleEye, togableBal, acctType, recentLoading, Loading }) => {
+const HomeScreen = ({ UserDetails, AccountBal, toggleEye, togableBal, acctType, Loading }) => {
   return (
     <div className='w-full  h-[85%] '>
         <div className=" w-full fixed flex-col h-[30%] bg-white flex top-0">
@@ -64,7 +64,7 @@ const HomeScreen = ({ UserDetails, Recent, AccountBal, toggleEye, togableBal, ac
         </div>
         <div className="w-full h-[60%] flex mt-[60%] p-5">
 
-        <RecentTransaction recentLoading={recentLoading} Recent={Recent} />
+        <RecentTransaction />
 
         </div>
     </div>

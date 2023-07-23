@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom'
 import Nav from '../Components/Nav'
 import HomeScreen from '../Components/HomeScreen'
 import useGetBalance from '../Hooks/useGetBalance'
-import useRecentTransaction from '../Hooks/useRecentTransaction'
 
 const Dashboard = () => {
 
@@ -17,8 +16,6 @@ const Dashboard = () => {
   const [AccountBal, setAccountBal] = useState(null)
   const [starBal, setStarBal] = useState('')
   const [togableBal, setTogableBal] = useState(null)
-
-  const { recent, recentfeedback, recentLoading } = useRecentTransaction('transactionHistory', account_number);
   
   const apiUrl ="http://127.0.0.1:8000/api";
 
@@ -66,6 +63,7 @@ const Dashboard = () => {
       });
   }
 
+
 //call account api
   useEffect(() => {
     fetchApi()
@@ -83,7 +81,7 @@ const Dashboard = () => {
   }
   return (
     <div className='flex flex-col w-[100svw] h-[100svh] gap-4'>
-      <HomeScreen AccountBal={AccountBal} Recent={recent} UserDetails={UserDetails} toggleEye={toggleEye} togableBal={togableBal} recentLoading={recentLoading} Loading={Loading}/>
+      <HomeScreen AccountBal={AccountBal} UserDetails={UserDetails} toggleEye={toggleEye} togableBal={togableBal} Loading={Loading}/>
       <Nav/>
     </div>
   )

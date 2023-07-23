@@ -1,6 +1,5 @@
 import {React, useState } from 'react'
 import BankCode from '../Hooks/BankCode'
-import RecentList from './RecentList'
 import ListBeneficiary from './ListBeneficiary'
 import SearchAccount from './SearchAccount'
 import RecentTransaction from './RecentTransaction'

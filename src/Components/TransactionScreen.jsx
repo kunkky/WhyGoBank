@@ -69,7 +69,7 @@ const TransactionScreen = (props) => {
                                       </div>
                                   </div>
 
-                                  <div className="bg-[#F8F4FC] p-5 rounded w-full h-auto flex flex-row justify-between items-center" onClick={addEventListener => (TransChoice('others'))}>
+                                  <div className="bg-[#F8F4FC] p-5 rounded w-full h-auto flex flex-row justify-between items-center" onClick={() => (TransChoice('others'))}>
                                       <div className='flex flex-row item-center justify-center'>
                                           <div className=" bg-[#020216] py-4 px-2 rounded mr-2">
                                               <img src={Logo} alt="" className='w-full h-[15px]' />

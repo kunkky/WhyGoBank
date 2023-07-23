@@ -1,13 +1,17 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
+import { React, useCallback,} from 'react'
+import { Link, useNavigate } from 'react-router-dom';
 import { ProgressBar } from 'react-loader-spinner'
+import useRecentTransaction from '../Hooks/useRecentTransaction';
 
+const RecentTransaction = () => {
+  const navigate = useNavigate();
+  const UserDetails = JSON.parse(sessionStorage.getItem("user"));
+  const account_number = UserDetails.user.account_number;
 
-const RecentTransaction = (props) => {
-  const recentTransaction =props.Recent;
-  const recentLoading = props.recentLoading;
-  console.log("i stopped her trying to fix transaction list");
-  let senderName, fName,space, sName, avartar, tDate; 
+  const { recent, recentfeedback, recentLoading } = useRecentTransaction('transactionHistory', account_number);
+  const recentTransaction = recent;
+
+  let senderName='',  tDate=""; 
   const fDate = (tDate) =>{
 
 
@@ -30,14 +34,37 @@ const RecentTransaction = (props) => {
     var formattedDateTime = `${formattedDate} | ${formattedTime}`;
     return formattedDateTime;
   }
+  const displayedNames = [];
+//redirect to transfer on click
+  const navtoPayment = useCallback((RecipientAcct) => {
+
+    // use callback to perform function once
+    navigate("/amount", {
+      state: RecipientAcct,
+      
+    });
+
+  }, [navigate]);
+
+
+
+  const sendToRecentAct=(id)=>{
+    const RecipientAcct = {
+      account_number: recentTransaction[id].receiver_account_number,
+      account_name: recentTransaction[id].reciever_account_name,
+      bank_code: "",
+      bank_name: recentTransaction[id].reciever_bank_name,
+    };
+    navtoPayment(RecipientAcct)
+  }
+
 
   return (
     <div className='w-full'>
-      <div className="text-sm h-[10%] w-full border-t-2 border-t-[#F8F1E9] ">Transactions</div>
       <div className="h-[90%] overflow-y-auto flex flex-col gap-4 scroll-smooth">
 
         { 
-          recentLoading === true ? < div className="flex flex-row h-full w-full justify-center"> <ProgressBar
+          recentLoading === true ? < div className="flex flex-row h-full w-full"> <ProgressBar
             height="100"
             width="100"
             ariaLabel="progress-bar-loading"
@@ -47,41 +74,72 @@ const RecentTransaction = (props) => {
             barColor='#F8F4FC'
           /> </div> :
             recentTransaction.length <1 ?'No Transaction':
-            recentTransaction.map((transaction, index) => (
-              senderName = transaction.reciever_account_name,
-            fName=senderName.slice(0,1),
-            space = senderName.search(" "),
-            sName= senderName.slice(space, space+1),
-            avartar=fName+sName,
-            tDate = new Date(transaction.created_at),
-            transaction.mode.toLowerCase() === 'credit' ?
+              recentTransaction.map((transaction, index) => {
+                  // Check if the name is already in the array of displayed names
+                  const isNameDisplayed = displayedNames.includes(transaction.reciever_account_name);
+
+                  // If the name is already displayed, return null to skip rendering this item
+                  if (isNameDisplayed) {
+                    return null;
+                  }
+
+                  // If the name is not yet displayed, add it to the array of displayed names
+                  displayedNames.push(transaction.reciever_account_name);
+
+                  // Render the item's name
+                  senderName = transaction.reciever_account_name;
+
+                  // Split the string into individual words
+                let wordsArray = senderName.split(" ");
+                let avartar =""
+                  // Extract the first character of each word and concatenate them
+                  for (let i = 0; i < 2; i++) {
+                    avartar += wordsArray[i][0];
+                  }
+                    tDate = new Date(transaction.created_at);
+
+                  return (
+
+                    transaction.mode.toLowerCase() === 'credit' ?
 
               < div className="flex p-2 flex-row h-[62px] w-full bg-[#F8F4FC] rounded-sm gap-3 justify-center" key={index}>
-                <div className="bg-[#DECBF1] text-[#F8F4FC] rounded-sm text-3xl w-[55px] aspect-square flex justify-center items-center">{avartar}</div>
+                <div className="bg-[#DECBF1] text-[#F8F4FC] font-bold rounded-sm text-3xl w-[50px] aspect-square flex justify-center items-center">{avartar}</div>
                 <div className=' flex-grow h-full flex flex-col justify-center'>
-                    <div className="flex-1 text-xl border-b-[0.2px] border-b-[#CCCCD0]-100 font-bold">{transaction.mode} | {transaction.amount}</div>
+                          <div className="flex-1 text-[11px]  font-semibold border-b-[0.2px] border-b-[#CCCCD0]-100 font-bold">{transaction.reciever_account_name} </div>
                   <div className="flex-1 flex flex-row justify-between items-center pr-3">
-                    <div className="text-[#CCCCD0] text-sm">{fDate(tDate)}</div>
-                    <Link className="text-[#ccccd0] text-sm" to={`ViewTransaction\`${transaction.id}`}>View</Link>
+                    <div className="text-[#CCCCD0] text-[10px]">{fDate(tDate)}</div>
+                    <Link className="text-[#ccccd0] text-[10px]" to={`ViewTransaction\`${transaction.id}`}>View</Link>
                   </div>
                 </div>
               </div>
-              :
+                      :
               < div className="flex p-2 flex-row h-[62px] w-full bg-[#F8F1E9] rounded-sm gap-3 justify-center" key={index}>
-                <div className="bg-[#E6CCCE] text-[#F8F4FC] rounded-sm text-3xl w-[55px] aspect-square flex justify-center items-center">AA</div>
+                        <div className="bg-[#E6CCCE] text-[#F8F4FC] font-bold rounded-sm text-3xl w-[50px] aspect-square flex justify-center items-center">{avartar}</div>
                 <div className=' flex-grow h-full flex flex-col justify-center'>
-                    <div className="flex-1 border-b-[0.2px] border-b-[#CCCCD0]-100 text-[#81020C] capitalize">{transaction.mode} | {transaction.amount.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}</div>
-                  <div className="flex-1 flex flex-row justify-between items-center pr-3">
-                    <div className="text-[#CCCCD0] text-sm">{fDate(tDate)}</div>
-                    <Link className="text-[#ccccd0] text-sm" to={`ViewTransaction\`${transaction.id}`}>View</Link>
+                          <div className="flex-1 border-b-[0.2px] text-[11px] font-semibold border-b-[#CCCCD0]-100 text-[#81020C] capitalize ">{transaction.reciever_account_name}</div>
+                  <div className="flex-1 flex flex-row justify-between items-center items-center pr-3">
+                    <div className="text-[#CCCCD0] text-[10px]">{fDate(tDate)}</div>
+                            <Link className="text-[#ccccd0] text-[10px]" to={`ViewTransaction\`${transaction.id}`}>View</Link>
+                            <div className="text-[#ccccd0] text-[10px]" onClick={() => sendToRecentAct(index)}>
+                              <span className="material-symbols-outlined text-lg">
+                                send_money
+                              </span>
+                            </div>
                   </div>
                 </div>
               </div>
-            ))
+
+                );
+                })
+              
+
+
 }
+
 
       </div>
     </div>
+
 
   )
 }

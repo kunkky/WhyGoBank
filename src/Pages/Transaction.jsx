@@ -21,7 +21,6 @@ const Transaction = () => {
     // use callback to perform function once
     navigate("/amount", {
       state: RecipientAcct,
-      replace: true,
     });
    
   }, [navigate]);

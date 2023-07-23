@@ -1,24 +1,17 @@
 import { React, useState, useEffect } from 'react'
 import BankCode from '../Hooks/BankCode'
-import RecentList from './RecentList'
 import ListBeneficiary from './ListBeneficiary'
-import SameSearchAccount from './SameSearchAccount'
+import SearchAccount from './SearchAccount'
+import RecentTransaction from './RecentTransaction'
+import useRecentTransaction from '../Hooks/useRecentTransaction'
+import useGetSameBank from '../Hooks/useGetSameBank'
 
 const SameTransaction = (props) => {
-  const banks = BankCode.entity
   const navtoPayment = props.navtoPayment;
-
-
-  const [recent, setRecent] = useState([
-    { account_name: 'Batman adekunle', account_number: 'Justice League', bank_name: "Access Bank" },
-    { account_name: 'Hulk ademuyiwa', account_number: '810', bank_name: "GTB Bank" },
-    { account_name: 'Flash', account_number: 'Justice League', bank_name: "Fairmoney" },
-    { account_name: 'Iron Man', account_number: '8104048887', bank_name: "Access Bank" },
-    { account_name: 'Kola Ademuyiwa', account_number: '8023048893', bank_name: "Opay" }
-  ])
-  const [recentLoading, setRecentLoading] = useState(false)
-  const [beneficiary, setBeneficiary] = useState([])
   const [beneFeedback, setBeneFeedback] = useState('')
+  const [SameSearchAccount, setSameSearchAccount] = useState('')
+  const [Beneficiary, setBeneficiary] = useState('')
+
 
   const [listScreen, setListScreen] = useState('recent')
   //fectch apis
@@ -29,7 +22,6 @@ const SameTransaction = (props) => {
 
   //fetch recent
   const fetchApi = async () => {
-    setRecentLoading(true);
 
     fetch(apiUrl + '/Beneficiary', {
       method: 'POST',
@@ -45,47 +37,21 @@ const SameTransaction = (props) => {
       .then(response => response.json())
       .then(data => {
         // Data successfully retrieved
-        setRecentLoading(false);
         data.message ? setBeneFeedback(data.message) : setBeneficiary(data)
       })
       .catch(error => {
         // Handle any errors
-        setRecentLoading(false);
         setBeneFeedback(error)
       });
   }
 
-//get all same bank Account
-
-  const [whyGoAcct, setWhyGoAcct] = useState([])
-  const [whyGoAcctError, setWhyGoAcctError] = useState(null)
-//fetch its api
-  const SameBank = async () => {
-    fetch(apiUrl + '/sameBankAccounts', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-
-      },
-      body: JSON.stringify(
-        { "account_number": account_number }
-      )
-    })
-      .then(response => response.json())
-      .then(data => {
-        // Data successfully retrieved
-        data.message ? setWhyGoAcctError(data.message) : setWhyGoAcct(data)
-      })
-      .catch(error => {
-        // Handle any errors
-        setWhyGoAcctError(error)
-      });
-  }
-
 useEffect(() => {
-  SameBank()
-}, [account_number])
+  fetchApi()
+}, [])
+
+  console.log(Beneficiary);
+//get all same bank Account
+const { whyGoAcct, whyGoAcctError, whyGoAcctloader } = useGetSameBank('sameBankAccounts', account_number);
 
   const [actInput, setActInput] = useState('')
   const [searchSame, setSearchSame] = useState('')
@@ -113,6 +79,9 @@ useEffect(() => {
     //go to next page
     navtoPayment(RecipientAcct)
   }
+
+//receent
+  const { recent, recentfeedback, recentLoading } = useRecentTransaction('transactionHistory', account_number);
 
   return (
     <div className='w-full  h-[100%] '>
@@ -148,7 +117,7 @@ useEffect(() => {
             {listScreen === "recent" ? <h1 className='text-[#9A9AA2] border-0 border-b-2 border-b-slate-400 pb-2' onClick={() => (setListScreen('recent'))}>Recents</h1> : <h1 className='text-[#9A9AA2] border-0  pb-2' onClick={() => (setListScreen('recent'))}>Recents</h1>
             }
             {
-              listScreen === "beneficiary" ? <h1 className='text-[#9A9AA2] border-0 border-b-2 border-b-slate-400 pb-2' onClick={() => (setListScreen('beneficiary'))}>Beneficiaries</h1> : <h1 className='text-[#9A9AA2] border-0  pb-2' onClick={() => (setListScreen('beneficiary'))}>Recents</h1>
+              listScreen === "beneficiary" ? <h1 className='text-[#9A9AA2] border-0 border-b-2 border-b-slate-400 pb-2' onClick={() => (setListScreen('beneficiary'))}>Beneficiaries</h1> : <h1 className='text-[#9A9AA2] border-0  pb-2' onClick={() => (setListScreen('beneficiary'))}>Beneficiaries</h1>
             }
             {
               listScreen === "search" ? <div className="material-symbols-outlined  border-0 border-b-2 border-b-slate-400 pb-2 text-[#676773]" onClick={() => (setListScreen('search'))}>
@@ -161,7 +130,7 @@ useEffect(() => {
 
           </div>
           <div className='h-[auto] w-full flex flex-col'>
-            {listScreen === 'recent' ? <RecentList /> : listScreen === 'beneficiary' ? <ListBeneficiary /> : <SameSearchAccount recent={recent} />}
+            {listScreen === 'recent' ? <RecentTransaction recentLoading={recentLoading} Recent={recent} /> : listScreen === 'beneficiary' ? <ListBeneficiary /> : <SameSearchAccount recent={recent} />}
           </div>
         </div>
 
