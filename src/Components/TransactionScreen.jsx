@@ -2,7 +2,6 @@ import { React, useState } from 'react'
 import Logo from '.././Assets/Images/logo.png'
 import OtherTransaction from './OtherTransaction';
 import SameTransaction from './SameTransaction';
-import AmountScreen from './AmountScreen';
 import { Link } from 'react-router-dom';
 
 
@@ -92,7 +91,7 @@ const TransactionScreen = (props) => {
                       :
 
                       transactionType === 'same' ?
-                          <SameTransaction />
+                          <SameTransaction navtoPayment={navtoPayment} />
                           :
                           transactionType === 'others' &&
                           <OtherTransaction navtoPayment={navtoPayment}/>

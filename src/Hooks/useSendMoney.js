@@ -5,7 +5,7 @@ import BaseUrl from './../BaseUrl'
 const useSendMoney = (url, transactionDetail) => {
 
     const accessToken = sessionStorage.getItem("token");
-    const [apifeedback, setApifeedback] = useState('')
+    const [apifeedback, setApifeedback] = useState(null)
 
     
     const fetchApi = async () => {

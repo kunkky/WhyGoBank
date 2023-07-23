@@ -10,6 +10,8 @@ import Dashboard from './Pages/Dashboard'
 import Transaction from './Pages/Transaction'
 import PasswordReset from './Pages/PasswordReset'
 import AmountToTransfer from './Pages/AmountToTransfer'
+import FailurePage from './Pages/FailurePage'
+import TransactionResult from './Pages/TransactionResult'
 
 
 
@@ -63,6 +65,18 @@ const App = () => {
       <Route path='/amount' element={
         <ProtectedRoutes>
           <AmountToTransfer />
+        </ProtectedRoutes>
+      }></Route>
+
+      <Route path='/TransactionResult' element={
+        <ProtectedRoutes>
+          <TransactionResult />
+        </ProtectedRoutes>
+      }></Route>
+
+      <Route path='/failed' element={
+        <ProtectedRoutes>
+          <FailurePage />
         </ProtectedRoutes>
       }></Route>
 

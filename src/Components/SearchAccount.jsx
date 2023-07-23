@@ -1,5 +1,4 @@
 import { React, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const SearchAccount = (props) => {
     const recentTrans=props.recent;
@@ -17,8 +16,6 @@ const SearchAccount = (props) => {
       setSearchResult(filteredAccount)
       
     }
-   const navigate=useNavigate;
-   console.log(navigate);
   const transferTo = (accountNumber, bankName, accountName) =>{
     const TransferAct ={
       account_name: accountName,
@@ -26,7 +23,6 @@ const SearchAccount = (props) => {
       account_number: accountNumber
 
     }
-    console.log(TransferAct);
   }
 
   return (

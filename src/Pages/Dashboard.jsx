@@ -2,11 +2,11 @@ import { React, useEffect, useState} from 'react'
 import { useLocation } from 'react-router-dom'
 import Nav from '../Components/Nav'
 import HomeScreen from '../Components/HomeScreen'
+import useGetBalance from '../Hooks/useGetBalance'
 
 
 const Dashboard = () => {
 
-  let endPoint="";
   //set Use location so as to get user info
   const location = useLocation()
   const UserDetails = JSON.parse(sessionStorage.getItem("user"));
@@ -53,6 +53,12 @@ const Dashboard = () => {
       console.log(error);
     });
 }
+
+
+//fetch user account balance
+  const getBalance = useGetBalance(account_number, "accountDetails")
+
+  const accBal =Number(getBalance.accountBal);
 
   const fetchApi = async () => {
     setLoading(true);

@@ -1,13 +1,14 @@
-import { React, useState } from 'react'
+import { React, useState, useEffect } from 'react'
 import BankCode from '../Hooks/BankCode'
 import RecentList from './RecentList'
 import ListBeneficiary from './ListBeneficiary'
 import SameSearchAccount from './SameSearchAccount'
 
-const SameTransaction = () => {
+const SameTransaction = (props) => {
   const banks = BankCode.entity
-  const [nextBtn, setNextBtn] = useState('disabled');
-  const [acctName, setAcctName] = useState('')
+  const navtoPayment = props.navtoPayment;
+
+
   const [recent, setRecent] = useState([
     { account_name: 'Batman adekunle', account_number: 'Justice League', bank_name: "Access Bank" },
     { account_name: 'Hulk ademuyiwa', account_number: '810', bank_name: "GTB Bank" },
@@ -17,7 +18,6 @@ const SameTransaction = () => {
   ])
   const [recentLoading, setRecentLoading] = useState(false)
   const [beneficiary, setBeneficiary] = useState([])
-  const [recentLoader, setRecentLoader] = useState(false)
   const [beneFeedback, setBeneFeedback] = useState('')
 
   const [listScreen, setListScreen] = useState('recent')
@@ -55,8 +55,64 @@ const SameTransaction = () => {
       });
   }
 
+//get all same bank Account
 
+  const [whyGoAcct, setWhyGoAcct] = useState([])
+  const [whyGoAcctError, setWhyGoAcctError] = useState(null)
+//fetch its api
+  const SameBank = async () => {
+    fetch(apiUrl + '/sameBankAccounts', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
 
+      },
+      body: JSON.stringify(
+        { "account_number": account_number }
+      )
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Data successfully retrieved
+        data.message ? setWhyGoAcctError(data.message) : setWhyGoAcct(data)
+      })
+      .catch(error => {
+        // Handle any errors
+        setWhyGoAcctError(error)
+      });
+  }
+
+useEffect(() => {
+  SameBank()
+}, [account_number])
+
+  const [actInput, setActInput] = useState('')
+  const [searchSame, setSearchSame] = useState('')
+  const sameActInput=()=>{
+    //filter based on input
+    const filteredAccount = whyGoAcct.WhyGoBankUsers.filter((item) => {
+      return item.fullname.toLowerCase() === actInput.toLowerCase() || item.account_number.toLowerCase() === actInput.toLowerCase() || item.username.toLowerCase() === actInput.toLowerCase()
+    });
+    setSearchSame(filteredAccount)
+  }
+
+  //set Input
+  const sameActInputsetter=(e)=>{
+  setSearchSame([]);
+  setActInput(e.target.value);
+  }
+  //navigator
+  const sendMoney = () => {
+    const RecipientAcct = {
+      account_number: searchSame[0].account_number,
+      account_name: searchSame[0].fullname,
+      bank_code: '99999',
+      bank_name: "Why Go Bank",
+    };
+    //go to next page
+    navtoPayment(RecipientAcct)
+  }
 
   return (
     <div className='w-full  h-[100%] '>
@@ -67,11 +123,19 @@ const SameTransaction = () => {
 
           <div className="bg-[#F8F4FC] p-2 rounded w-full h-auto flex flex-col justify-between">
             <form action="flex flex-row">
-              <input name="bank" id="" className='text-[#9A9AA2] mt-1 px-1 w-full border-0 bg-transparent border-b-2 border-b-slate-400' value='Why Go Bank' disabled/>
-              <input type='text' className='font-semibold border-0 bg-transparent  h-auto w-full' value='' placeholder='Accounnt Name' />
-              <input type="text" placeholder='Enter 10 digits Account Number' className='text-[#9A9AA2] mt-1 px-1 w-full border-0 bg-transparent border-b-2 border-b-slate-400' />
-
-              <button className='text-center text-[#9A9AA2] p-3 bg-[#F2EAF9] mt-3 w-full' disabled>Next</button>
+              <h1 className='text-[#9A9AA2] mt-1 px-1 w-full'>Why Go Bank</h1>
+              <input value={actInput} type='text' className='font-semibold text-sm border-0 bg-transparent  border-b-2 border-b-slate-400 h-auto w-full' onBlur={sameActInput} onInput={sameActInputsetter} placeholder='Accounnt Name Or Account Number' />
+              {
+                searchSame.length > 0 ?<>
+                  <p className='text-sm'>{searchSame[0].fullname}
+                    <br />{searchSame[0].account_number}
+                  </p>
+                  <button className='bg-[#020216] w-full p-3 rounded-sm text-[#DECBF1] mt-1' onClick={sendMoney}>Next</button>
+                </>
+                   :<> Account Not Found <br/>
+                  <button className='text-center text-[#9A9AA2] p-3 bg-[#F2EAF9] mt-1 w-full' disabled>Next</button>
+                    </>
+              }
             </form>
           </div>
         </div>

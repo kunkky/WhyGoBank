@@ -2,16 +2,15 @@ import {React, useEffect, useState} from 'react'
 import { useLocation, useNavigate, Link } from 'react-router-dom'
 import { ThreeDots } from 'react-loader-spinner'
 import useSendMoney from './../Hooks/useSendMoney'
-import getBalance from '../Hooks/useGetBalance'
 import useGetBalance from '../Hooks/useGetBalance'
+
 
 
 const AmountToTransfer = () => {
 
 
   const UserDetails = JSON.parse(sessionStorage.getItem("user"));
-
-
+  const account_number =  UserDetails.user.account_number;
 
 
 //use navigate to go back
@@ -46,18 +45,11 @@ const location= useLocation();
   const [password, setPassword] = useState('')
   const [PasswordError, setPasswordError] = useState(null)
   const [transactionDetail, setTransactionDetail] = useState(null)
-  
 //get balance variables 
-//fetch user account balance
-const accBal=5000000;
-  const getBalance = useGetBalance('accountDetails', transactionDetail)
-  useEffect(() => {
-    // Update the senderfeedback when it changes from the custom hook
-    setSenderfeedback(sender.apifeedback);
-  }, [getBalance.accountBal]);
+//fetch user account balance with Custom hook
+  const getBalance = useGetBalance(account_number, "accountDetails")
 
-console.log(getBalance);
-
+  const accBal =Number(getBalance.accountBal);
 
   
   const cleanAmount = (userInput)=>{
@@ -111,44 +103,63 @@ console.log(getBalance);
   }
   //confirm transaction pin
   const confirmPin=()=>{
-
-
+    setLoading(true)
     const transaction_pin = UserDetails.user.transaction_pin;
-
     //check if pin length is less  than 6
     if (password.length<6){
       setPasswordError('PIN should not be less than 6 Digits')
+      setLoading(false)
+
     }
     else if (Number(password) !== transaction_pin ){
       setPasswordError('Incorrect Pin')
-
+      setLoading(false)
     }
     else{
       setPasswordError(null)
+      const clearedAmt = amount.replace(/,/g, '')
       setTransactionDetail({
         sender_account_number: UserDetails.user.account_number,
         sender_account_name: UserDetails.user.fullname,
         receiver_account_number: TransationDetails.account_number,
         reciever_account_name: TransationDetails.account_name,
         reciever_bank_name: TransationDetails.bank_name,
-        amount: amount,
+        amount: clearedAmt,
         naration: "null",
       })
-     
+
     }
-  
   }
 //fectch api
 
   const [loading, setLoading] = useState(false)
-  const [senderfeedback, setSenderfeedback] = useState('')
+  //send money with custom hook
+
   const sender = useSendMoney('sendMoney', transactionDetail)
+  
+const redirector=()=>{
+    //redirect  to success page
+
+  if (sender.apifeedback !== null ){
+    const transResult = {
+      transactionResult: transactionDetail,
+      transStatus: sender.apifeedback,
+    }
+    navigate('/TransactionResult', 
+    {
+      state: transResult,
+      replace: true,
+    }
+    );
+ }
+}
+
 
   useEffect(() => {
-    // Update the senderfeedback when it changes from the custom hook
-    setSenderfeedback(sender.apifeedback);
-  }, [sender.apifeedback]);
-
+    redirector()
+  }, [sender.apifeedback])
+  
+  
 
 
 //rediect if senderfeedback is successful

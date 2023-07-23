@@ -3,28 +3,14 @@ import BankCode from '../Hooks/BankCode'
 import RecentList from './RecentList'
 import ListBeneficiary from './ListBeneficiary'
 import SearchAccount from './SearchAccount'
-import ChooseAmount from './ChooseAmount'
-import { useNavigate } from 'react-router-dom'
 
-const dummyAct = [
-    { account_name: 'Batman adekunle', account_number: 'Justice League', bank_name: "Access Bank" },
-    { account_name: 'Hulk ademuyiwa', account_number: '810', bank_name: "GTB Bank" },
-    { account_name: 'Flash', account_number: 'Justice League', bank_name: "Fairmoney" },
-    { account_name: 'Iron Man', account_number: '8104048887', bank_name: "Access Bank" },
-    { account_name: 'Kola Ademuyiwa', account_number: '8023048893', bank_name: "Opay" }
-];
 
 const OtherTransaction = (props) => {
 
     const navtoPayment = props.navtoPayment;
     const banks = BankCode.entity
-    const [nextBtn, setNextBtn] = useState('disabled');
-    const [acctName, setAcctName] = useState('')
-    const [recent, setRecent] = useState(dummyAct)
+    const [recent, setRecent] = useState([])
     const [recentLoading, setRecentLoading] = useState(false)
-    const [beneficiary, setBeneficiary] = useState(dummyAct)
-    const [recentLoader, setRecentLoader] = useState(false)
-    const [beneFeedback, setBeneFeedback] = useState('')
     const [btnCheckControl, setBtnCheckControl] = useState(false)
     const [accountNum, setAccountNum] = useState('')
     const [accountName, setAccountName] = useState(null)
@@ -136,10 +122,6 @@ const OtherTransaction = (props) => {
         }
     }
     const sendMoney=()=>{
-            //get back name
-            
-      
-
         const RecipientAcct={
             account_number: accountNum,
             account_name: accountName,
@@ -148,8 +130,6 @@ const OtherTransaction = (props) => {
         };
         //go to next page
         navtoPayment(RecipientAcct)
-      console.log('transfer can be made');
-      
     }
   return (
       <div className='w-full  h-[100%] '>
@@ -178,8 +158,8 @@ const OtherTransaction = (props) => {
                           <div className='text-sm text-[#81020C]'>{accountError}</div>
                             { 
                               btnCheckControl ===false ? 
-                                  <button className='text-center text-[#9A9AA2] p-3 bg-[#F2EAF9] mt-3 w-full' disabled>Next</button>:
-                                  <button className='text-center text-[#9A9AA2] p-3 bg-[#020216] mt-3 w-full'>Next</button>
+                                  <button className='text-center text-[#9A9AA2] p-3 bg-[#F2EAF9] mt-3 w-full' disabled>Next </button>:
+                                  <button type='submit' className='text-center text-[#9A9AA2] p-3 bg-[#020216] mt-3 w-full'>Next</button>
                             }
                       </form>
                   </div>

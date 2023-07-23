@@ -27,7 +27,6 @@ const RecentTransaction = (props) => {
     // Combine the formatted date and time
     var formattedDateTime = `${formattedDate} | ${formattedTime}`;
     return formattedDateTime;
-
   }
   return (
     <div className='w-full'>
@@ -57,7 +56,7 @@ const RecentTransaction = (props) => {
               < div className="flex p-2 flex-row h-[62px] w-full bg-[#F8F4FC] rounded-sm gap-3 justify-center" key={index}>
                 <div className="bg-[#DECBF1] text-[#F8F4FC] rounded-sm text-3xl w-[55px] aspect-square flex justify-center items-center">{avartar}</div>
                 <div className=' flex-grow h-full flex flex-col justify-center'>
-                  <div className="flex-1 text-xl border-b-[0.2px] border-b-[#CCCCD0]-100 font-bold">{transaction.mode}</div>
+                    <div className="flex-1 text-xl border-b-[0.2px] border-b-[#CCCCD0]-100 font-bold">{transaction.mode} | {transaction.amount}</div>
                   <div className="flex-1 flex flex-row justify-between items-center pr-3">
                     <div className="text-[#CCCCD0] text-sm">{fDate(tDate)}</div>
                     <Link className="text-[#ccccd0] text-sm" to={`ViewTransaction\`${transaction.id}`}>View</Link>
@@ -68,7 +67,7 @@ const RecentTransaction = (props) => {
               < div className="flex p-2 flex-row h-[62px] w-full bg-[#F8F1E9] rounded-sm gap-3 justify-center" key={index}>
                 <div className="bg-[#E6CCCE] text-[#F8F4FC] rounded-sm text-3xl w-[55px] aspect-square flex justify-center items-center">AA</div>
                 <div className=' flex-grow h-full flex flex-col justify-center'>
-                  <div className="flex-1 text-xl border-b-[0.2px] border-b-[#CCCCD0]-100 font-bold text-[#81020C] capitalize">{transaction.mode}</div>
+                    <div className="flex-1 border-b-[0.2px] border-b-[#CCCCD0]-100 text-[#81020C] capitalize">{transaction.mode} | {transaction.amount.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}</div>
                   <div className="flex-1 flex flex-row justify-between items-center pr-3">
                     <div className="text-[#CCCCD0] text-sm">{fDate(tDate)}</div>
                     <Link className="text-[#ccccd0] text-sm" to={`ViewTransaction\`${transaction.id}`}>View</Link>
