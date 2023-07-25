@@ -2,6 +2,7 @@ import { React, useCallback,} from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { ProgressBar } from 'react-loader-spinner'
 import useRecentTransaction from '../Hooks/useRecentTransaction';
+import DateWrapper from './DateWrapper'; 
 
 const RecentTransaction = () => {
   const navigate = useNavigate();
@@ -9,31 +10,10 @@ const RecentTransaction = () => {
   const account_number = UserDetails.user.account_number;
 
   const { recent, recentfeedback, recentLoading } = useRecentTransaction('transactionHistory', account_number);
+
   const recentTransaction = recent;
 
   let senderName='',  tDate=""; 
-  const fDate = (tDate) =>{
-
-
-    // Create a new Date object using the original date string
-    var date = new Date(tDate);
-
-    // Format the date
-    var formattedDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-
-    // Format the time
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var ampm = hours >= 12 ? "pm" : "am";
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    minutes = minutes < 10 ? "0" + minutes : minutes;
-    var formattedTime = `${hours}:${minutes}${ampm}`;
-
-    // Combine the formatted date and time
-    var formattedDateTime = `${formattedDate} | ${formattedTime}`;
-    return formattedDateTime;
-  }
   const displayedNames = [];
 //redirect to transfer on click
   const navtoPayment = useCallback((RecipientAcct) => {
@@ -71,7 +51,7 @@ const RecentTransaction = () => {
             wrapperStyle={{}}
             wrapperClass="progress-bar-wrapper"
             borderColor='none'
-            barColor='#F8F4FC'
+            barColor='#ffffff'
           /> </div> :
             recentTransaction.length <1 ?'No Transaction':
               recentTransaction.map((transaction, index) => {
@@ -96,8 +76,7 @@ const RecentTransaction = () => {
                   for (let i = 0; i < 2; i++) {
                     avartar += wordsArray[i][0];
                   }
-                    tDate = new Date(transaction.created_at);
-
+                tDate = new Date(transaction.created_at) ;
                   return (
 
                     transaction.mode.toLowerCase() === 'credit' ?
@@ -107,8 +86,10 @@ const RecentTransaction = () => {
                 <div className=' flex-grow h-full flex flex-col justify-center'>
                           <div className="flex-1 text-[11px]  font-semibold border-b-[0.2px] border-b-[#CCCCD0]-100 font-bold">{transaction.reciever_account_name} </div>
                   <div className="flex-1 flex flex-row justify-between items-center pr-3">
-                    <div className="text-[#CCCCD0] text-[10px]">{fDate(tDate)}</div>
-                    <Link className="text-[#ccccd0] text-[10px]" to={`ViewTransaction\`${transaction.id}`}>View</Link>
+                            <div className="text-[#CCCCD0] text-[10px]">{
+                              <DateWrapper key={index} tDate={tDate} />
+                            }</div>
+                    <Link className="text-[#ccccd0] text-[10px]" to={`../ViewTransaction/${transaction.id}`}>View</Link>
                   </div>
                 </div>
               </div>
@@ -118,8 +99,10 @@ const RecentTransaction = () => {
                 <div className=' flex-grow h-full flex flex-col justify-center'>
                           <div className="flex-1 border-b-[0.2px] text-[11px] font-semibold border-b-[#CCCCD0]-100 text-[#81020C] capitalize ">{transaction.reciever_account_name}</div>
                   <div className="flex-1 flex flex-row justify-between items-center items-center pr-3">
-                    <div className="text-[#CCCCD0] text-[10px]">{fDate(tDate)}</div>
-                            <Link className="text-[#ccccd0] text-[10px]" to={`ViewTransaction\`${transaction.id}`}>View</Link>
+                            <div className="text-[#CCCCD0] text-[10px]">{
+                              <DateWrapper key={index} tDate={tDate} />
+                            }</div>
+                            <Link className="text-[#ccccd0] text-[10px]" to={`../ViewTransaction/${transaction.id}`}>View</Link>
                             <div className="text-[#ccccd0] text-[10px]" onClick={() => sendToRecentAct(index)}>
                               <span className="material-symbols-outlined text-lg">
                                 send_money

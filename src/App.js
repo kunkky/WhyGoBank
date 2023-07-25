@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate} from 'react-router-dom'
 import Home from './Pages/Home'
 import SignUp from './Pages/SignUp'
 import Signin from './Pages/Signin'
@@ -12,6 +12,8 @@ import PasswordReset from './Pages/PasswordReset'
 import AmountToTransfer from './Pages/AmountToTransfer'
 import FailurePage from './Pages/FailurePage'
 import TransactionResult from './Pages/TransactionResult'
+import ViewTransaction from './Pages/ViewTransaction'
+
 
 
 
@@ -67,7 +69,12 @@ const App = () => {
           <AmountToTransfer />
         </ProtectedRoutes>
       }></Route>
-
+      
+      <Route path='/ViewTransaction/:transactionId' element={
+        <ProtectedRoutes>
+          <ViewTransaction />
+        </ProtectedRoutes>
+      }></Route>
       <Route path='/TransactionResult' element={
         <ProtectedRoutes>
           <TransactionResult />
