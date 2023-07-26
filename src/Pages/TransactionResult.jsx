@@ -1,29 +1,32 @@
-import { React, useEffect, useState,  } from 'react'
+import { React, useCallback, useEffect, useState,  } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import TransactionFailed from './TransactionFailed';
 import TransactionSuccessful from '../Components/TransactionSuccessful';
+import html2canvas from 'html2canvas';
 
 const TransactionResult = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [tranStatus, setTranStatus] = useState('')
+  
   useEffect(() => {
     if (!location.state.transStatus) {
       navigate(-1);
     }
    
   }, [])
-  console.log(location.state.transStatus);
+    useEffect(() => {
     setTranStatus(location.state.transStatus)
 
-  const transactionResult=navigate.state;
-      console.log(navigate.state);
+    }, [])
+    
+  const transactionResult = location.state.transactionResult;
   return (
     tranStatus ==='successful' ?
-      // <TransactionSuccessful transactionResult={transactionResult}/>
-      'success':
-      <TransactionFailed />
+      <TransactionSuccessful transactionResult={transactionResult} />:
+      ''
   )
+
 }
 
 export default TransactionResult
