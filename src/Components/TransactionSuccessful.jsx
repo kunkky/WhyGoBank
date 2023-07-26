@@ -1,4 +1,3 @@
-import { useRef } from 'react'
 import { Link } from 'react-router-dom';
 import html2canvas from 'html2canvas';
 
@@ -6,8 +5,6 @@ import html2canvas from 'html2canvas';
 const TransactionSuccessful = (props) => {
   const transactionResult = props.transactionResult;
   
-
-  const componentRef = useRef(null);
 
   const handleDownloadImage = async () => {
   //  convertComponentToImage(componentRef.current);
@@ -18,7 +15,7 @@ const TransactionSuccessful = (props) => {
 
       const link = document.createElement('a');
       link.href = data;
-      link.download = 'downloaded-image.jpg';
+      link.download = 'WhyGoBank_' + transactionResult.receiver_account_number + '_receipt.jpg';
 
       document.body.appendChild(link);
       link.click();
@@ -31,7 +28,7 @@ const TransactionSuccessful = (props) => {
 
   return (
     <div className='w-screen h-screen p-5'>
-      <div className='w-full h-auto p-5  bg-[#E4F2E7] rounded-lg' id="print" ref={componentRef}>
+      <div className='w-full h-auto p-5  bg-[#E4F2E7] rounded-lg' id="print">
         <h1 className='font-bold text-[#018116] text-xl mb-4'>Transfer successful</h1>
         {
           <div>

@@ -1,10 +1,11 @@
-import { React, useEffect, useState } from 'react'
+import { React} from 'react'
 import Nav from '../Components/Nav'
 import { useNavigate, Link } from 'react-router-dom'
 import { useParams } from 'react-router-dom';
 import useSingleTransaction from '../Hooks/useSingleTransaction';
 import { ProgressBar } from 'react-loader-spinner'
 import DateWrapper from '../Components/DateWrapper';
+import html2canvas from 'html2canvas';
 
 const ViewTransaction = () => {
     const { transactionId } = useParams();
@@ -17,9 +18,26 @@ const ViewTransaction = () => {
     }
     const { loading, actfeedback, transaction } = useSingleTransaction("SingleTraansaction", transactionId)
     let tDate = transaction.created_at;
-console.log(transaction);
 
 
+    const handleDownloadImage = async () => {
+        //  convertComponentToImage(componentRef.current);
+        try {
+            const element = document.getElementById('print');
+            const canvas = await html2canvas(element);
+            const data = canvas.toDataURL('image/jpeg'); // Changed 'image/jpg' to 'image/jpeg'
+
+            const link = document.createElement('a');
+            link.href = data;
+            link.download = 'WhyGoBank_' + transaction.reciever_account_name +'_receipt.jpg';
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error) {
+            console.error('Error converting element to image:', error);
+        }
+    };
   return (
   <div className='flex flex-col w-[100svw] h-[100svh] gap-4'>
           <div className=" w-full flex-col bg-white flex">
@@ -42,7 +60,7 @@ console.log(transaction);
                   </div>
               </div>
           </div>
-          <div className='p-5 flex flex-col m-5 bg-blue-50 rounded-sm'>
+          <div className='p-3 flex flex-col gap-4'>
               {
                   loading === true ? < div className="flex flex-row items-center justify-center h-full w-full"> <ProgressBar
                       height="100"
@@ -53,23 +71,28 @@ console.log(transaction);
                       borderColor='none'
                       barColor='#000000'
                   /> </div> : 
-                        <>
+                  <div>
+                          <div className='w-full h-auto p-2 bg-[#E4F2E7]' id="print">
                             <small className='text-[10px] '> Receiver's Name</small>
-                        <h1>{transaction.reciever_account_name}</h1>
+                        <h1 className='m-0 text-sm'>{transaction.reciever_account_name}</h1>
                             <small className='text-[10px] '> Receiver's Account Number</small>
-                        <h1>{transaction.receiver_account_number}</h1>
+                        <h1 className='m-0 text-sm'>{transaction.receiver_account_number}</h1>
                             <small className='text-[10px] '> Bank</small>
-                        <h1>{transaction.reciever_bank_name}</h1>
+                        <h1 className='m-0 text-sm'>{transaction.reciever_bank_name}</h1>
                             <small className='text-[10px] '> Date</small>
-                        <h1><DateWrapper tDate={tDate} /></h1>
+                        <h1 className='m-0 text-sm'><DateWrapper tDate={tDate} /></h1>
                             <small className='text-[10px] '> Status</small>
-                        <h1>{transaction.status}</h1>
+                        <h1 className='m-0 text-sm'>{transaction.status}</h1>
                             <small className='text-[10px] '> Naration</small>
-                          <h1>{transaction.naration}</h1>
+                          <h1 className='m-0 text-sm'>{transaction.naration}</h1>
                             <small className='text-[10px] '> Reference Number</small>
-                        <h1>{transaction.transation_id}</h1>
-                          <button className='m-5 p-2 text-center text-white bg-blue-950 rounded-sm' >Print</button>
-                      </>
+                        <h1 className='m-0 text-sm'>{transaction.transation_id}</h1>
+                         
+                      </div>
+                      <div>
+                              <button onClick={handleDownloadImage} className='w-full p-2 text-center text-white bg-blue-950 rounded-sm' >Print</button>
+                        </div>
+                       </div>
               }
           
           </div>

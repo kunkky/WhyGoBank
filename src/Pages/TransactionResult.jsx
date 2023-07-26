@@ -24,7 +24,7 @@ const TransactionResult = () => {
   return (
     tranStatus ==='successful' ?
       <TransactionSuccessful transactionResult={transactionResult} />:
-      ''
+      <TransactionFailed />
   )
 
 }
