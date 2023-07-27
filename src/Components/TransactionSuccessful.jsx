@@ -21,7 +21,7 @@ const TransactionSuccessful = (props) => {
       link.click();
       document.body.removeChild(link);
     } catch (error) {
-      console.error('Error converting element to image:', error);
+      //console.error('Error converting element to image:', error);
     }
   };
   

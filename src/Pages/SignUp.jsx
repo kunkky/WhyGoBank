@@ -116,7 +116,6 @@ const SignUp = () => {
         });
       } else {
         setLoading(false);
-        console.log(data);
         setfeedback(data.message)
 
       }

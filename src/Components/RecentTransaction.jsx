@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ProgressBar } from 'react-loader-spinner'
 import useRecentTransaction from '../Hooks/useRecentTransaction';
 import DateWrapper from './DateWrapper'; 
+import AvartarCreator from '../Hooks/AvartarCreator';
 
 const RecentTransaction = () => {
   const navigate = useNavigate();
@@ -66,25 +67,16 @@ const RecentTransaction = () => {
                   // If the name is not yet displayed, add it to the array of displayed names
                   displayedNames.push(transaction.reciever_account_name);
 
-                  // Render the item's name
-                  senderName = transaction.reciever_account_name;
-
-                  // Split the string into individual words
-                let wordsArray = senderName.split(" ");
-                let avartar =""
-                  // Extract the first character of each word and concatenate them
-                  for (let i = 0; i < 2; i++) {
-                    avartar += wordsArray[i][0];
-                  }
+                
                 tDate = new Date(transaction.created_at) ;
                   return (
 
                     transaction.mode.toLowerCase() === 'credit' ?
 
               < div className="flex p-2 flex-row h-[62px] w-full bg-[#F8F4FC] rounded-sm gap-3 justify-center" key={index}>
-                <div className="bg-[#DECBF1] text-[#F8F4FC] font-bold rounded-sm text-3xl w-[50px] aspect-square flex justify-center items-center">{avartar}</div>
+                        <div className="bg-[#DECBF1] text-[#F8F4FC] font-bold rounded-sm text-3xl w-[50px] aspect-square flex justify-center items-center">{<AvartarCreator UserName={transaction.reciever_account_name} />}</div>
                 <div className=' flex-grow h-full flex flex-col justify-center'>
-                          <div className="flex-1 text-[11px]  font-semibold border-b-[0.2px] border-b-[#CCCCD0]-100 font-bold">{transaction.reciever_account_name} </div>
+                          <div className="flex-1 text-[11px]  font-semibold border-b-[0.2px] border-b-[#CCCCD0]-100">{transaction.reciever_account_name} </div>
                   <div className="flex-1 flex flex-row justify-between items-center pr-3">
                             <div className="text-[#CCCCD0] text-[10px]">{
                               <DateWrapper key={index} tDate={tDate} />
@@ -95,10 +87,10 @@ const RecentTransaction = () => {
               </div>
                       :
               < div className="flex p-2 flex-row h-[62px] w-full bg-[#F8F1E9] rounded-sm gap-3 justify-center" key={index}>
-                        <div className="bg-[#E6CCCE] text-[#F8F4FC] font-bold rounded-sm text-3xl w-[50px] aspect-square flex justify-center items-center">{avartar}</div>
+                        <div className="bg-[#E6CCCE] text-[#F8F4FC] font-bold rounded-sm text-3xl w-[50px] aspect-square flex justify-center items-center">{<AvartarCreator UserName={transaction.reciever_account_name} />}</div>
                 <div className=' flex-grow h-full flex flex-col justify-center'>
                           <div className="flex-1 border-b-[0.2px] text-[11px] font-semibold border-b-[#CCCCD0]-100 text-[#81020C] capitalize ">{transaction.reciever_account_name}</div>
-                  <div className="flex-1 flex flex-row justify-between items-center items-center pr-3">
+                  <div className="flex-1 flex flex-row justify-between items-center pr-3">
                             <div className="text-[#CCCCD0] text-[10px]">{
                               <DateWrapper key={index} tDate={tDate} />
                             }</div>

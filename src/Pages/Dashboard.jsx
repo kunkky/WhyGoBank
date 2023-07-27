@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import Nav from '../Components/Nav'
 import HomeScreen from '../Components/HomeScreen'
 import useGetBalance from '../Hooks/useGetBalance'
+import Toast from '../Components/Toast'
 
 const Dashboard = () => {
 
@@ -23,7 +24,13 @@ const Dashboard = () => {
   const accessToken = sessionStorage.getItem("token");
   //  const 
 
-
+//get state
+  const [message, setMessage] = useState(null)
+useEffect(() => {
+  if (location.state!==null){
+  setMessage(location.state.message)
+}
+}, [location.state])
 
 //fetch user account balance
   const getBalance = useGetBalance(account_number, "accountDetails")
@@ -73,7 +80,6 @@ const Dashboard = () => {
     const inputString =AccountBal;
     if (/\d/.test(togableBal) ===true) {
       setTogableBal(inputString.replace(/\d/g, "*"));   
-      //setStarBal(data.account.balance.replace(/\d+/g, "*"))
     }
     else{
       setTogableBal(AccountBal);        
@@ -81,8 +87,12 @@ const Dashboard = () => {
   }
   return (
     <div className='flex flex-col w-[100svw] h-[100svh] gap-4'>
+     { message!=null &&
+      <Toast message={message} />
+      }
       <HomeScreen AccountBal={AccountBal} UserDetails={UserDetails} toggleEye={toggleEye} togableBal={togableBal} Loading={Loading}/>
       <Nav/>
+
     </div>
   )
 }

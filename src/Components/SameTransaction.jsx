@@ -49,7 +49,6 @@ useEffect(() => {
   fetchApi()
 }, [])
 
-  console.log(Beneficiary);
 //get all same bank Account
 const { whyGoAcct, whyGoAcctError, whyGoAcctloader } = useGetSameBank('sameBankAccounts', account_number);
 

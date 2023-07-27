@@ -9,7 +9,7 @@ import html2canvas from 'html2canvas';
 
 const ViewTransaction = () => {
     const { transactionId } = useParams();
-    console.log(transactionId);
+   
     const navigate = useNavigate();
 
 
@@ -35,7 +35,7 @@ const ViewTransaction = () => {
             link.click();
             document.body.removeChild(link);
         } catch (error) {
-            console.error('Error converting element to image:', error);
+          //  console.error('Error converting element to image:', error);
         }
     };
   return (

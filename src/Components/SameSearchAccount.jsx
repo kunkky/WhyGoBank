@@ -19,14 +19,14 @@ const SameSearchAccount = (props) => {
     }
    const navigate=useNavigate;
   const transferTo = (accountNumber, bankName, accountName) =>{
-   console.log(navigate);
+
     const TransferAct ={
       account_name: accountName,
       bank_name: bankName,
       account_number: accountNumber
 
     }
-    console.log(TransferAct);
+
   }
 
   return (
