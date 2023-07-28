@@ -32,6 +32,7 @@ useEffect(() => {
 }
 }, [location.state])
 
+
 //fetch user account balance
   const getBalance = useGetBalance(account_number, "accountDetails")
 

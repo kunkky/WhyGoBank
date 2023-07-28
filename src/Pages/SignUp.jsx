@@ -2,7 +2,7 @@ import { React, useState, useLayoutEffect } from 'react'
 import Logo from './../Assets/Images/logo.png'
 import { Link, useNavigate,  } from 'react-router-dom'
 import { ThreeDots } from 'react-loader-spinner'
-
+import BaseUrl from '../BaseUrl'
 const SignUp = () => {
 
   const navigate = useNavigate()
@@ -36,7 +36,7 @@ const SignUp = () => {
   const [feedback, setfeedback] = useState('')
   let userInfo = {}
 
-  const LoginUrl = 'http://127.0.0.1:8000/api/register';
+  const LoginUrl = 'register';
 
 //password toggle
   const togglePassword= ()=>{
@@ -98,7 +98,7 @@ const SignUp = () => {
   const fetchApi = async () => {
     setLoading(true);
     try {
-      const response = await fetch(LoginUrl, {
+      const response = await fetch(BaseUrl+LoginUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(
@@ -111,7 +111,10 @@ const SignUp = () => {
         sessionStorage.setItem("token", data.token);
         sessionStorage.setItem("user", JSON.stringify(data));
         navigate("/dashboard", {
-          state: data,
+          state: {
+            data,
+            message: `welcome `
+          },
           replace: true,
         });
       } else {

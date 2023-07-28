@@ -10,7 +10,6 @@ import Dashboard from './Pages/Dashboard'
 import Transaction from './Pages/Transaction'
 import PasswordReset from './Pages/PasswordReset'
 import AmountToTransfer from './Pages/AmountToTransfer'
-import FailurePage from './Pages/FailurePage'
 import TransactionResult from './Pages/TransactionResult'
 import ViewTransaction from './Pages/ViewTransaction'
 
@@ -81,11 +80,6 @@ const App = () => {
         </ProtectedRoutes>
       }></Route>
 
-      <Route path='/failed' element={
-        <ProtectedRoutes>
-          <FailurePage />
-        </ProtectedRoutes>
-      }></Route>
 
           {/* Error Page */}
       <Route path='*' element={<ErrorPage />}></Route>
