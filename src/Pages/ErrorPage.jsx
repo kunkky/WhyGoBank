@@ -6,7 +6,7 @@ const ErrorPage = () => {
   return (
     <div className='flex item-center justify-between flex-col p-5'>
       <img src={ErrorPageImg} alt="Error 404" />
-      <Link to='/home' className='mt-20 w-full p-5 text-center rounded bg-[#020216] text-[#DECBF1]'>Go Home</Link>
+      <Link to='/' className='mt-20 w-full p-5 text-center rounded bg-[#020216] text-[#DECBF1]'>Go Home</Link>
     </div>
   )
 }

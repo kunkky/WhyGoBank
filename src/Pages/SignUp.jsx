@@ -1,5 +1,5 @@
 import { React, useState, useLayoutEffect } from 'react'
-import Logo from './../Assets/Images/logo.png'
+import Logo from './../Assets/Images/darklogo.svg'
 import { Link, useNavigate,  } from 'react-router-dom'
 import { ThreeDots } from 'react-loader-spinner'
 import BaseUrl from '../BaseUrl'

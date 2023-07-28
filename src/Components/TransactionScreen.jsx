@@ -11,7 +11,7 @@ const TransactionScreen = (props) => {
     const goBack = props.handleGoBack;
     const navtoPayment = props.navtoPayment;
     const [transactionType, setTransactionType] = useState('')
-
+    const logOut = props.logOut;
  
 
     const TransChoice = (choice) => {
@@ -34,11 +34,9 @@ const TransactionScreen = (props) => {
 
 
                       <div className="h-[100%] mt-[15px] flex justify-center items-center">
-                          <Link to="/profile">
-                              <span className="material-symbols-outlined text-[#E6CCCE] h-[10px]">
+                          <span className="material-symbols-outlined text-[#E6CCCE] h-[10px]" onClick={logOut}>
                                   logout
                               </span>
-                          </Link>
                       </div>
                   </div>
               </div>

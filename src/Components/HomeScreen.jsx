@@ -4,7 +4,8 @@ import {Link} from "react-router-dom"
 import RecentTransaction from './RecentTransaction'
 import { ProgressBar } from 'react-loader-spinner'
 
-const HomeScreen = ({ UserDetails, AccountBal, toggleEye, togableBal, acctType, Loading }) => {
+const HomeScreen = ({ UserDetails, AccountBal, toggleEye, togableBal, acctType, Loading, logOut }) => {
+
   return (
     <div className='w-full  h-[85%] '>
         <div className=" w-full fixed flex-col h-[30%] bg-white flex top-0">
@@ -15,11 +16,11 @@ const HomeScreen = ({ UserDetails, AccountBal, toggleEye, togableBal, acctType, 
                   <img src={UserImg} alt={UserDetails.name} className='w-[30px] h-auto rounded-sm' />
                 </div>
                 <div className="h-[100%] aspect-square rounded-sm bg-white flex justify-center items-center">
-                  <Link to="/profile">
-                    <span className="material-symbols-outlined text-[#E6CCCE] h-[10px]">
+                 
+                    <span className="material-symbols-outlined text-[#E6CCCE] h-[10px]" onClick={logOut}>
                       logout
                     </span>
-                  </Link>
+                 
                 </div>
               </div>
             </div>

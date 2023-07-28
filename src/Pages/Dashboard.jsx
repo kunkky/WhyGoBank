@@ -1,29 +1,50 @@
-import { React, useEffect, useState} from 'react'
+import { React, useCallback, useEffect, useState} from 'react'
 import { useLocation } from 'react-router-dom'
 import Nav from '../Components/Nav'
 import HomeScreen from '../Components/HomeScreen'
 import useGetBalance from '../Hooks/useGetBalance'
 import Toast from '../Components/Toast'
+import BaseUrl from '../BaseUrl'
+import useLogout from '../Hooks/useLogout'
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
+//logout function
 
+const navigate=useNavigate;
   //set Use location so as to get user info
   const location = useLocation()
   const UserDetails = JSON.parse(sessionStorage.getItem("user"));
-  const account_number = UserDetails.user.account_number;
-
-  const [Loading, setLoading] = useState(true);
+  let account_number = null;
+  if (sessionStorage.getItem("user")){
+   account_number= UserDetails.user.account_number
+  }
+  else{
+  navigate('/')
+  
+  }
+  const [Loading, setLoading] = useState(false);
   const [Actfeedback, setActfeedback] = useState('')
   const [AccountBal, setAccountBal] = useState(null)
   const [starBal, setStarBal] = useState('')
   const [togableBal, setTogableBal] = useState(null)
-  
-  const apiUrl ="http://127.0.0.1:8000/api";
 
 
   const accessToken = sessionStorage.getItem("token");
-  //  const 
 
+  const [logMeOut, setLogMeOut] = useState(false)
+
+  //logout function
+  const logOut = () => {
+    setLogMeOut(true);
+
+  }
+  const handleLogoutSuccess = () => {
+    window.location.href = '/';
+  };
+  useLogout(logMeOut, 'logOut', handleLogoutSuccess);
+
+  //  const 
 //get state
   const [message, setMessage] = useState(null)
 useEffect(() => {
@@ -33,6 +54,7 @@ useEffect(() => {
 }, [location.state])
 
 
+  
 //fetch user account balance
   const getBalance = useGetBalance(account_number, "accountDetails")
 
@@ -41,7 +63,7 @@ useEffect(() => {
   const fetchApi = async () => {
     setLoading(true);
 
-    fetch(apiUrl + "/accountDetails", {
+    fetch(BaseUrl + "accountDetails", {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -91,7 +113,7 @@ useEffect(() => {
      { message!=null &&
       <Toast message={message} />
       }
-      <HomeScreen AccountBal={AccountBal} UserDetails={UserDetails} toggleEye={toggleEye} togableBal={togableBal} Loading={Loading}/>
+      <HomeScreen logOut={logOut} AccountBal={AccountBal} UserDetails={UserDetails} toggleEye={toggleEye} togableBal={togableBal} Loading={Loading}/>
       <Nav/>
 
     </div>

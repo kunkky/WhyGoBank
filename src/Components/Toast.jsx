@@ -29,7 +29,6 @@ const Toast = (props) => {
         notify()
     }
     }, [message])
-    console.log(message);
   return (
     <div>
           <ToastContainer
