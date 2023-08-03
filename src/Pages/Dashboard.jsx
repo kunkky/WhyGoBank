@@ -1,4 +1,4 @@
-import { React, useCallback, useEffect, useState} from 'react'
+import { React, useCallback, useEffect, useLayoutEffect, useState} from 'react'
 import { useLocation } from 'react-router-dom'
 import Nav from '../Components/Nav'
 import HomeScreen from '../Components/HomeScreen'
@@ -10,6 +10,10 @@ import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
 //logout function
+  useLayoutEffect(() => {
+    document.title = "Dashboard | Big Money awaits you"
+  }, [])
+
 
 const navigate=useNavigate;
   //set Use location so as to get user info
@@ -109,7 +113,7 @@ useEffect(() => {
     }
   }
   return (
-    <div className='flex flex-col w-[100svw] h-[100svh] gap-4'>
+    <div className='flex flex-col w-[100svw] h-screen gap-4'>
      { message!=null &&
       <Toast message={message} />
       }

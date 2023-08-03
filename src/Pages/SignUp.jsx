@@ -168,21 +168,21 @@ const SignUp = () => {
   }
 
   return (
-    <div className=' w-screen h-[100svh] lg:h-auto flex justify-center items-center flex-col lg:p-5'>
+    <div className=' w-screen h-[100svh] lg:h-auto flex justify-center items-center flex-col lg:p-5 lg:w-[800px]'>
       <div className="">
         <img src={Logo} alt="" className=' w-28 sm:w-40 lg:w-52' />
       </div>
       <div className="text-[#020216] text-center m-1 font-bold sm:m-2 sm:text-3sxl sm:font-bold"> Why Go Bank</div>
 
-      <form className="w-full p-5 md:w-[700px] flex flex-col" onSubmit={FormHandler}>
-        <input type="text" name="fullname" placeholder='Full Name' onInput={(e) => fullnameHandler(e)} className='p-2 text-[#CCCCD0] bg-[#F8F1E9] rounded-sm mb-2'/>
+      <form className="w-full p-5 md:w-[700px] flex flex-col gap-1 md:gap-2" onSubmit={FormHandler}>
+        <input type="text" name="fullname" placeholder='Full Name' onInput={(e) => fullnameHandler(e)} className='p-2 text-[#020216] bg-[#F8F1E9] rounded-sm mb-2'/>
         <div className='mt-[-0.5rem] text-[12px] mb-2 text-[#81020C]'>{FullnameError !== null && FullnameError}</div>
-        <input type="text" name="email" placeholder='Email' onInput={(e) => emailHandler(e)} className='p-2 text-[#CCCCD0] bg-[#F8F1E9] rounded-sm mb-2' />
+        <input type="text" name="email" placeholder='Email' onInput={(e) => emailHandler(e)} className='p-2 text-[#020216] bg-[#F8F1E9] rounded-sm mb-2' />
         <div className='mt-[-0.5rem] text-[#81020C] text-[12px] mb-2'>{EmailError !== null && EmailError}</div>
-        <input type="text" name="Username" placeholder='Username' onInput={(e) => usernameHandler(e)} className='p-2 text-[#CCCCD0] bg-[#F8F1E9] rounded-sm mb-2' />
+        <input type="text" name="Username" placeholder='Username' onInput={(e) => usernameHandler(e)} className='p-2 text-[#020216] bg-[#F8F1E9] rounded-sm mb-2' />
           {usernameError !== null ? <div className='mt-[-0.5rem] text-[12px] text-[#81020C] mb-2'>{usernameError } </div> :"" } 
         <div className="relative">
-          <input type={PasswordType} name="password" placeholder='Password' onInput={(e) => InputPasswordHandler(e)} className='w-full p-2 text-[#CCCCD0] bg-[#F8F1E9] rounded-sm mb-2' />
+          <input type={PasswordType} name="password" placeholder='Password' onInput={(e) => InputPasswordHandler(e)} className='w-full p-2 text-[#020216] bg-[#F8F1E9] rounded-sm mb-2' />
           <div className="absolute right-0 top-0 p-2 flex items-center" onClick={togglePassword}>
             <span className="material-symbols-outlined text-[#CCCCD0]">
               {PasswordEyes}
@@ -191,7 +191,7 @@ const SignUp = () => {
         </div>
         <div className='mt-[-0.5rem] text-[12px] text-[#81020C] mb-2'>{PasswordError !== null && PasswordError}</div>
         <div className="relative">
-          <input type={confirmPasswordType} name="confirmPassword" placeholder='Confirm Password' onInput={(e) => InputConfirmPasswordHandler(e)} className='w-full p-2 text-[#CCCCD0] bg-[#F8F1E9] rounded-sm mb-2' />
+          <input type={confirmPasswordType} name="confirmPassword" placeholder='Confirm Password' onInput={(e) => InputConfirmPasswordHandler(e)} className='w-full p-2 text-[#020216] bg-[#F8F1E9] rounded-sm mb-2' />
           <div className="absolute right-0 top-0 p-2 flex items-center" onClick={toggleConfirm}>
             <span className="material-symbols-outlined text-[#CCCCD0]">
               {ConfirmPasswordEyes}
@@ -215,7 +215,7 @@ const SignUp = () => {
 
       </form>
       <div className='border-t-solid border-t-2 border-[#F8F1E9] mt-2 p-2 text-center w-[80%] lg:w-[600px]'>
-        <Link to="/signin" className='font-bold cursor-pointer'>Sign In</Link>  Returning User <br />
+        <Link to="/signin" className='font-bold cursor-pointer'>Returning User? Sign In</Link>   <br />
         <Link to="/passwordReset" className='font-bold text-center cursor-pointer'>Forget Password</Link>
       
       </div>

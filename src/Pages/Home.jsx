@@ -1,4 +1,4 @@
-import {React, useEffect} from 'react'
+import {React, useEffect, useLayoutEffect} from 'react'
 import Logo from './../Assets/Images/logo.png'
 import { useNavigate } from 'react-router-dom'
 
@@ -11,6 +11,9 @@ const navigate = useNavigate();
       },3000)
  }, [navigate])
 
+  useLayoutEffect(() => {
+    document.title = "Home | Big Money awaits you"
+  }, [])
  
   return (
     <div className='bg-[#020216] w-screen h-screen flex justify-center items-center flex-col'>

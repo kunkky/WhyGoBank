@@ -1,3 +1,5 @@
 
-const BaseUrl =  'http://127.0.0.1:8000/api/';
+const BaseUrl =  'https://whygobank.digitalworldclassscholars.org/api/';
+
 export default BaseUrl
+

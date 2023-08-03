@@ -110,17 +110,17 @@ const Signin = () => {
     }
   }
   return (
-    <div className=' w-screen h-[100svh] lg:h-auto flex justify-center items-center flex-col lg:p-5'>
+    <div className=' w-screen h-[100svh] lg:h-auto flex justify-center items-center flex-col lg:p-5 lg:w-[800px]'>
       <div className="">
         <img src={Logo} alt="" className=' w-28 sm:w-40 lg:w-52' />
       </div>
       <div className="text-[#020216] text-center m-1 font-bold sm:m-2 sm:text-3sxl sm:font-bold"> Why Go Bank</div>
 
-      <form className="w-full p-5 md:w-[700px] flex flex-col" onSubmit={FormHandler}>
-        <input type="text" name="email" placeholder='Email' onInput={(e) => emailHandler(e)} className='p-2 text-[#CCCCD0] bg-[#F8F1E9] rounded-sm mb-2' />
+      <form className="w-full p-5 md:w-[700px] flex flex-col gap-2" onSubmit={FormHandler}>
+        <input type="text" name="email" placeholder='Email' onInput={(e) => emailHandler(e)} className='p-3 text-[#CCCCD0] bg-[#F8F1E9] rounded-sm mb-2' />
         <div className='mt-[-0.5rem] text-[#81020C] text-[12px] mb-2'>{EmailError !== null && EmailError}</div>
         <div className="relative">
-          <input type={PasswordType} name="password" placeholder='Password' onInput={(e) => InputPasswordHandler(e)} className='w-full p-2 text-[#CCCCD0] bg-[#F8F1E9] rounded-sm mb-2' />
+          <input type={PasswordType} name="password" placeholder='Password' onInput={(e) => InputPasswordHandler(e)} className='w-full p-3 text-[#020216] bg-[#F8F1E9] rounded-sm mb-2' />
           <div className="absolute right-0 top-0 p-2 flex items-center" onClick={togglePassword}>
             <span className="material-symbols-outlined text-[#CCCCD0]">
               {PasswordEyes}
@@ -145,7 +145,7 @@ const Signin = () => {
       </form>
       <div className='border-t-solid border-t-2 border-[#F8F1E9] mt-2 p-2 text-center w-[80%] lg:w-[600px]'>
         <Link to="/passwordReset" className='font-bold text-center cursor-pointer'>Forget Password</Link> <br />
-        <Link to="/signup" className='font-bold cursor-pointer'>Sign Up</Link>  New User 
+        <Link to="/signup" className='font-bold cursor-pointer'>New User? Sign Up</Link>   
 
       </div>
     </div>

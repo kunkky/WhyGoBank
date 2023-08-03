@@ -3,7 +3,6 @@ import { Routes, Route, Navigate} from 'react-router-dom'
 import Home from './Pages/Home'
 import SignUp from './Pages/SignUp'
 import Signin from './Pages/Signin'
-import Receipt from './Pages/Receipt'
 import Profile from './Pages/Profile'
 import ErrorPage from './Pages/ErrorPage'
 import Dashboard from './Pages/Dashboard'
@@ -37,11 +36,6 @@ const App = () => {
       <Route path='/passwordReset' element={<PasswordReset />}></Route>
 {/* Protected routes */}
       
-         <Route path='/receipt' element={
-         <ProtectedRoutes>
-         <Receipt />
-         </ProtectedRoutes>
-         }></Route>
       
       <Route path='/dashboard' element={
       <ProtectedRoutes>

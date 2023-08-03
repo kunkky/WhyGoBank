@@ -24,9 +24,6 @@ const OtherTransaction = (props) => {
 //fectch apis
     const UserDetails = JSON.parse(sessionStorage.getItem("user"));
     const account_number = UserDetails.user.account_number;
-    const apiUrl = "http://127.0.0.1:8000/api";
-    const accessToken = sessionStorage.getItem("token");
-
     
 //fetch recent
     const fetchApi = async () => {
@@ -48,7 +45,6 @@ const OtherTransaction = (props) => {
                 if(data.status===false){ 
                     setAccountNamefeedBack("Account does not exist")
                     setAccountName(null)
-                    setBankName(null)
                 }
                 else{
                     setAccountNamefeedBack(null)
@@ -61,26 +57,46 @@ const OtherTransaction = (props) => {
                 // Handle any errors
                 setLoading(false);
                 setAccountName(null)
-                setBankName(null)
                 setAccountNamefeedBack("please check connection")
             });
     }
+    
 
     //get input and get account info
-    const checkInput=(userInput)=>{
+    const checkInput=(e)=>{
+        const newValue = e.target.value;
     //use regex to alphaet
-        setAccountNum(userInput.replace(/[A-Za-z]/g, ''));
+        // Check if the new value has more than 10 digits
+        if (newValue.length > 10) {
+            // If it does, truncate the input value to 10 digits
+            setAccountNum(newValue.slice(0, 10).replace(/[A-Za-z]/g, ''));
+
+        } else {
+            // Otherwise, update the input value normally
+            setAccountNum(newValue.replace(/[A-Za-z]/g, ''));
+
+        }
+        // if(accountNum.length<10){
+        // setAccountNum(e.target.value.replace(/[A-Za-z]/g, ''));
+        // }
         setAccountError(null)
-        setAccountName(null)
         setBtnCheckControl(false) 
+        setAccountNamefeedBack(null)
+        setBankError(null)
         
+        if(accountNum.length>=9){
+            checkAccount()    
+        }
+
 
     }    
     const bankSelectionHandler=(selction)=>{
     setsBankCode(selction)
     setBankError(null)
         setBtnCheckControl(false) 
+        if(accountNum.length===10){
         checkAccount()
+        }
     }
 
     //check Account
@@ -158,7 +174,7 @@ const OtherTransaction = (props) => {
                               accountNamefeedBack !== null ? accountNamefeedBack : accountName !== null ? accountName :
                               ''
                         } </label>
-                          <input type="text" placeholder='Enter 10 digits Account Number' className='text-[#9A9AA2] mt-1 px-1 w-full border-0 bg-transparent py-0 border-b-2 border-b-slate-400' value={accountNum} onChange={(e) => { checkInput(e.target.value) }} onBlur={checkAccount}/>
+                          <input type="text" placeholder='Enter 10 digits Account Number' className='text-[#9A9AA2] mt-1 px-1 w-full border-0 bg-transparent py-0 border-b-2 border-b-slate-400' value={accountNum}  onChange={checkInput}/>
                           <div className='text-sm text-[#81020C]'>{accountError}</div>
                             { 
                               btnCheckControl ===false ? 

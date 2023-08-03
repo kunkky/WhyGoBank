@@ -67,6 +67,8 @@ const location= useLocation();
     
   }
 
+  
+
   //set transfer Money Function 
   const transferMoney=(e)=>{
   e.preventDefault()
@@ -189,7 +191,7 @@ const redirector=()=>{
         </div>
         <div className="w-full h-[70%] flex p-5">
           {
-            <div className=' bg-[#F8F4FC] rounded p-5 w-full'>
+            <div className=' bg-[#F8F4FC] rounded p-5 w-full h-[auto]'>
               <h1 className='text-sm text-[#9A9AA2] mb-5'>Transaction Amount </h1>
               <div className='text-[#676773]'>Bank {TransationDetails.bank_name}</div>
               <div className='text-[#676773]'>{TransationDetails.account_number}</div>
